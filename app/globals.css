@@ -1,26 +1,253 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   Dark variant — applied via .dark class on <html>
+   ============================================================ */
+@custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+   Tailwind theme bridge
+   ============================================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background:              var(--background);
+  --color-foreground:              var(--foreground);
+  --color-card:                    var(--card);
+  --color-card-foreground:         var(--card-foreground);
+  --color-popover:                 var(--popover);
+  --color-popover-foreground:      var(--popover-foreground);
+  --color-primary:                 var(--primary);
+  --color-primary-foreground:      var(--primary-foreground);
+  --color-secondary:               var(--secondary);
+  --color-secondary-foreground:    var(--secondary-foreground);
+  --color-muted:                   var(--muted);
+  --color-muted-foreground:        var(--muted-foreground);
+  --color-accent:                  var(--accent);
+  --color-accent-foreground:       var(--accent-foreground);
+  --color-destructive:             var(--destructive);
+  --color-destructive-foreground:  var(--destructive-foreground);
+  --color-border:                  var(--border);
+  --color-input:                   var(--input);
+  --color-ring:                    var(--ring);
+
+  /* Radius scale */
+  --radius-sm:  calc(var(--radius) * 0.6);
+  --radius-md:  calc(var(--radius) * 0.8);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================================
+   Light mode design tokens — Warm Orange palette
+   ============================================================ */
+:root {
+  /* Primary — vivid warm orange */
+  --primary:             oklch(0.65 0.21 35);   /* #FF6B2C */
+  --primary-foreground:  oklch(1 0 0);           /* white */
+  --primary-hover:       oklch(0.59 0.22 35);   /* deeper orange */
+  --primary-glow:        oklch(0.65 0.21 35 / 25%);
+
+  /* Backgrounds */
+  --background:          oklch(0.98 0.01 70);   /* warm cream */
+  --foreground:          oklch(0.15 0.02 35);   /* warm near-black */
+
+  /* Cards & surfaces */
+  --card:                oklch(1 0 0);
+  --card-foreground:     oklch(0.15 0.02 35);
+  --popover:             oklch(1 0 0);
+  --popover-foreground:  oklch(0.15 0.02 35);
+
+  /* Muted */
+  --muted:               oklch(0.94 0.02 60);   /* warm light fill */
+  --muted-foreground:    oklch(0.52 0.04 40);
+
+  /* Secondary */
+  --secondary:           oklch(0.94 0.02 60);
+  --secondary-foreground:oklch(0.25 0.04 35);
+
+  /* Accent — amber gold */
+  --accent:              oklch(0.82 0.16 70);   /* #FFB347 */
+  --accent-foreground:   oklch(0.15 0.02 35);
+
+  /* Destructive */
+  --destructive:         oklch(0.55 0.22 25);   /* deep red */
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Borders & inputs */
+  --border:              oklch(0.88 0.03 60);
+  --input:               oklch(0.92 0.02 60);
+  --ring:                oklch(0.65 0.21 35 / 50%);
+
+  /* Radius */
+  --radius: 0.75rem;
+}
+
+/* ============================================================
+   Dark mode design tokens — Deep warm dark
+   ============================================================ */
+.dark {
+  /* Primary — lighter orange for dark bg */
+  --primary:             oklch(0.72 0.19 35);   /* #FF8C57 */
+  --primary-foreground:  oklch(1 0 0);
+  --primary-hover:       oklch(0.78 0.17 35);
+  --primary-glow:        oklch(0.72 0.19 35 / 30%);
+
+  /* Backgrounds */
+  --background:          oklch(0.11 0.02 35);   /* #12090A deep warm dark */
+  --foreground:          oklch(0.94 0.01 60);   /* warm off-white */
+
+  /* Cards & surfaces */
+  --card:                oklch(0.16 0.03 35);   /* #1C1009 */
+  --card-foreground:     oklch(0.94 0.01 60);
+  --popover:             oklch(0.16 0.03 35);
+  --popover-foreground:  oklch(0.94 0.01 60);
+
+  /* Muted */
+  --muted:               oklch(0.20 0.03 35);   /* #2A1509 */
+  --muted-foreground:    oklch(0.60 0.05 45);
+
+  /* Secondary */
+  --secondary:           oklch(0.20 0.03 35);
+  --secondary-foreground:oklch(0.94 0.01 60);
+
+  /* Accent */
+  --accent:              oklch(0.65 0.15 65);   /* #E8922B */
+  --accent-foreground:   oklch(0.94 0.01 60);
+
+  /* Destructive */
+  --destructive:         oklch(0.65 0.20 25);   /* #F87171 */
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Borders & inputs */
+  --border:              oklch(1 0 0 / 10%);
+  --input:               oklch(1 0 0 / 12%);
+  --ring:                oklch(0.72 0.19 35 / 50%);
+}
+
+/* ============================================================
+   Base styles
+   ============================================================ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    min-height: 100dvh;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  /* Mono text for short codes / URLs */
+  code, .font-mono {
+    font-family: var(--font-mono);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   Utility classes
+   ============================================================ */
+@layer utilities {
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(
+      135deg,
+      oklch(0.65 0.21 35),
+      oklch(0.75 0.18 55)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dark .text-gradient {
+    background: linear-gradient(
+      135deg,
+      oklch(0.72 0.19 35),
+      oklch(0.82 0.16 60)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    background: oklch(1 0 0 / 60%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid oklch(0.88 0.03 60);
+    box-shadow:
+      0 4px 24px oklch(0.65 0.21 35 / 8%),
+      0 1px 4px oklch(0 0 0 / 5%);
+  }
+
+  .dark .glass-card {
+    background: oklch(0.16 0.03 35 / 70%);
+    border-color: oklch(1 0 0 / 8%);
+    box-shadow:
+      0 4px 24px oklch(0 0 0 / 40%),
+      0 1px 4px oklch(0 0 0 / 20%);
+  }
+
+  /* Primary glow button effect */
+  .btn-glow {
+    box-shadow:
+      0 0 0 0 var(--primary-glow),
+      0 4px 16px var(--primary-glow);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+  }
+
+  .btn-glow:hover {
+    box-shadow:
+      0 0 0 3px var(--primary-glow),
+      0 8px 24px var(--primary-glow);
+    transform: translateY(-1px);
+  }
+
+  .btn-glow:active {
+    transform: translateY(0);
+  }
+
+  /* Subtle fade-in animation */
+  .animate-fade-in {
+    animation: fadeIn 0.35s ease both;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 }
