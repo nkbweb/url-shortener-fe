@@ -1,11 +1,8 @@
-// ============================================================
-// URL types — mirrors Prisma Url model + BE contract exactly
-// ============================================================
-
 export interface ShortUrl {
   id: string;
   originalUrl: string;
   shortCode: string;
+  shortUrl?: string;
   clicks: number;
   createdAt: string;
   userId: string | null;
@@ -13,26 +10,31 @@ export interface ShortUrl {
 
 export interface ShortenPayload {
   originalUrl: string;
-  shortCode?: string; // optional custom short code
+  shortCode?: string;
 }
 
-export interface ShortenResponse {
-  // BE returns 201 — shape may vary; cover common patterns
-  id?: string;
+export interface PaginatedUrls {
+  urls: ShortUrl[];
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+
+export interface AnalyticsData {
+  total: number;
+  last7Days: number;
+  clicksByDay: { date: string; count: number }[];
+  referrers: { source: string; count: number }[];
+  browsers: { browser: string; count: number }[];
+}
+
+export interface UrlAnalyticsResponse {
+  url: ShortUrl;
+  analytics: AnalyticsData;
+}
+
+export interface UpdateUrlPayload {
   originalUrl?: string;
   shortCode?: string;
-  clicks?: number;
-  createdAt?: string;
-  userId?: string | null;
-  // Some BEs wrap in a key:
-  url?: ShortUrl;
-  message?: string;
-}
-
-export interface GetAllUrlsResponse {
-  // GET /url — array or wrapped object
-  urls?: ShortUrl[];
-  data?: ShortUrl[];
 }
 
 export interface DeleteUrlResponse {

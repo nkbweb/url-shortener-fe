@@ -33,9 +33,9 @@ export async function POST(req: NextRequest) {
 
     const res = NextResponse.json({ message: "Token refreshed" }, { status: 200 });
 
-    // Update cookies with new tokens
-    const newAccess = data.accessToken;
-    const newRefresh = data.refreshToken ?? refreshToken; // reuse old if not rotated
+    // Update cookies with new tokens (BE wraps tokens in data.data)
+    const newAccess = data.data?.accessToken;
+    const newRefresh = data.data?.refreshToken ?? refreshToken;
     setAuthCookies(res, newAccess, newRefresh);
 
     return res;

@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { proxyToBE, getAccessToken } from "@/lib/api/proxy.helpers";
 
-// GET  /api/url  → GET  /url  (get all URLs for authenticated user)
-// POST /api/url  → POST /url/shorten  (create short URL)
 export async function GET(req: NextRequest) {
   try {
     const accessToken = getAccessToken(req);
-
     if (!accessToken) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const beRes = await proxyToBE("/url", {
+    const { searchParams } = req.nextUrl;
+    const cursor = searchParams.get("cursor") || "";
+    const limit = searchParams.get("limit") || "20";
+    const query = cursor ? `?cursor=${cursor}&limit=${limit}` : `?limit=${limit}`;
+
+    const beRes = await proxyToBE(`/url${query}`, {
       method: "GET",
       token: accessToken,
     });
@@ -32,7 +34,6 @@ export async function POST(req: NextRequest) {
     const beRes = await proxyToBE("/url/shorten", {
       method: "POST",
       body: JSON.stringify(body),
-      // Shorten can work unauthenticated too — forward token if present
       ...(accessToken ? { token: accessToken } : {}),
     });
 

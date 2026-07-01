@@ -5,9 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Link2,
-  BarChart2,
   Settings,
-  Gem,
   LogOut,
   ChevronsUpDown,
 } from "lucide-react";
@@ -29,13 +27,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/hooks/useAuth";
 
 const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Links", url: "/links", icon: Link2 },
-  { title: "Analytics", url: "/analytics", icon: BarChart2 },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
@@ -47,8 +42,10 @@ export function AppSidebar() {
     <Sidebar className="border-r">
       <SidebarHeader className="p-4">
         <Link href="/" className="flex items-center gap-2 font-semibold text-lg tracking-tight px-2">
-          <Link2 className="h-5 w-5" />
-          <span className="text-foreground">Snip</span>
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-orange-500 shadow-md shadow-primary/25">
+            <Link2 className="h-3.5 w-3.5 text-primary-foreground" />
+          </div>
+          <span className="text-gradient">Snip</span>
         </Link>
       </SidebarHeader>
 
@@ -57,7 +54,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {navItems.map((item) => {
-                const isActive = pathname === item.url || pathname.startsWith(item.url + "/");
+                const isActive = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
@@ -79,20 +76,6 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-3">
-        {/* Upgrade Card */}
-        <div className="bg-card text-card-foreground border rounded-md p-4 mb-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <Gem className="h-4 w-4" />
-            <h4 className="font-semibold text-sm">Upgrade to Pro</h4>
-          </div>
-          <p className="text-xs text-muted-foreground mb-4">
-            Unlock custom domains, advanced analytics and more.
-          </p>
-          <Button variant="default" className="w-full h-8 text-xs rounded-md">
-            Upgrade Now
-          </Button>
-        </div>
-
         {/* User Profile */}
         <SidebarMenu>
           <SidebarMenuItem>
@@ -100,7 +83,7 @@ export function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="w-full justify-between rounded-md px-2 py-5 border bg-background hover:bg-accent shadow-sm">
                   <div className="flex items-center gap-3">
-                    <div className="h-7 w-7 rounded-md bg-primary text-primary-foreground flex items-center justify-center text-xs font-medium">
+                    <div className="h-7 w-7 rounded-md bg-gradient-to-br from-primary to-orange-500 text-primary-foreground flex items-center justify-center text-xs font-medium shadow-sm">
                       {user?.email?.charAt(0).toUpperCase() || "U"}
                     </div>
                     <div className="flex flex-col text-left">
