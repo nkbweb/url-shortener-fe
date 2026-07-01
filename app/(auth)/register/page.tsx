@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LinkIcon, BarChart3, Shield, Zap } from "lucide-react";
 import { RegisterForm } from "@/components/auth/RegisterForm";
+import { RegisterAnimation } from "./animations";
 
 export const metadata: Metadata = { title: "Create account" };
 
@@ -13,7 +14,7 @@ const perks = [
 
 export default function RegisterPage() {
   return (
-    <div className="flex w-full max-w-4xl animate-slide-up">
+    <RegisterAnimation>
       {/* Brand showcase — hidden on small screens */}
       <div className="hidden lg:flex flex-1 flex-col justify-center pr-12">
         <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-orange-500 shadow-lg shadow-primary/30">
@@ -41,7 +42,7 @@ export default function RegisterPage() {
 
       {/* Form card */}
       <div className="w-full lg:w-[400px]">
-        <div className="glass-card w-full rounded-2xl p-8 animate-scale-in">
+        <div className="glass-card w-full rounded-2xl p-8">
           {/* Mobile header */}
           <div className="lg:hidden mb-8 text-center">
             <div className="mb-4 flex justify-center">
@@ -67,6 +68,6 @@ export default function RegisterPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </RegisterAnimation>
   );
 }

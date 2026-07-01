@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   Copy,
   Trash2,
@@ -90,35 +91,55 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
 
   if (isLoading && urls.length === 0) {
     return (
-      <div className="glass-card rounded-2xl p-6 space-y-3">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="glass-card rounded-2xl p-6 space-y-3"
+      >
         {[...Array(4)].map((_, i) => (
-          <div
+          <motion.div
             key={i}
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.08 }}
             className="h-12 rounded-xl bg-muted/60 animate-pulse"
-            style={{ animationDelay: `${i * 80}ms` }}
           />
         ))}
-      </div>
+      </motion.div>
     );
   }
 
   if (urls.length === 0) {
     return (
-      <div className="glass-card rounded-2xl p-12 text-center animate-fade-in">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-orange-500/10">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card rounded-2xl p-12 text-center"
+      >
+        <motion.div
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-orange-500/10"
+        >
           <ExternalLink className="h-8 w-8 text-primary" />
-        </div>
+        </motion.div>
         <p className="text-base font-semibold text-foreground">No links yet</p>
         <p className="mt-1 text-sm text-muted-foreground max-w-xs mx-auto">
           Shorten your first URL above to get started.
         </p>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <>
-      <div className="mb-3 relative">
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+        className="mb-3 relative"
+      >
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search links by URL or short code…"
@@ -134,9 +155,14 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
             Clear
           </button>
         )}
-      </div>
+      </motion.div>
 
-      <div className="glass-card rounded-2xl overflow-hidden animate-fade-in">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.15 }}
+        className="glass-card rounded-2xl overflow-hidden"
+      >
         <Table>
           <TableHeader>
             <TableRow className="border-border/60 hover:bg-transparent">
@@ -158,16 +184,24 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-12 text-muted-foreground">
+                <motion.td
+                  colSpan={5}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-12 text-muted-foreground"
+                >
                   No links match &ldquo;{searchQuery}&rdquo;
-                </TableCell>
+                </motion.td>
               </TableRow>
             ) : (
               filtered.map((url, i) => (
-                <TableRow
+                <motion.tr
                   key={url.id}
-                  className="border-border/40 hover:bg-muted/30 transition-colors duration-150 animate-slide-up group"
-                  style={{ animationDelay: `${i * 30}ms` }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03, type: "spring", stiffness: 260, damping: 24 }}
+                  data-slot="table-row"
+                  className="border-b border-border/40 transition-colors hover:bg-muted/30 group"
                 >
                   <TableCell className="pl-6 max-w-[240px]">
                     <a
@@ -318,12 +352,12 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                       </Dialog>
                     </div>
                   </TableCell>
-                </TableRow>
+                </motion.tr>
               ))
             )}
           </TableBody>
         </Table>
-      </div>
+      </motion.div>
 
       {/* Edit dialog */}
       {editTarget && (
@@ -337,21 +371,28 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
 
       {/* Load more */}
       {hasMore && (
-        <div className="mt-4 text-center">
-          <Button
-            variant="outline"
-            onClick={onLoadMore}
-            disabled={isLoading}
-            className="rounded-xl px-8"
-          >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <ChevronDown className="mr-2 h-4 w-4" />
-            )}
-            Load more
-          </Button>
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mt-4 text-center"
+        >
+          <motion.div whileTap={{ scale: 0.97 }}>
+            <Button
+              variant="outline"
+              onClick={onLoadMore}
+              disabled={isLoading}
+              className="rounded-xl px-8"
+            >
+              {isLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <ChevronDown className="mr-2 h-4 w-4" />
+              )}
+              Load more
+            </Button>
+          </motion.div>
+        </motion.div>
       )}
     </>
   );

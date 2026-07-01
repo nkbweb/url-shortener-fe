@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
 import { Link2, MousePointerClick, TrendingUp } from "lucide-react";
 import { ShortenForm } from "@/components/urls/ShortenForm";
 import { UrlTable } from "@/components/urls/UrlTable";
 import { useUrls } from "@/lib/hooks/useUrls";
 import { useAuthStore } from "@/lib/stores/authStore";
+import { stagger, itemVariants, fadeUp } from "@/lib/motion";
 
 export default function DashboardPage() {
-  const { urls, isLoading, hasMore, fetchUrls, loadMore, shorten, updateUrl, deleteUrl } = useUrls();
+  const { urls, isLoading, hasMore, fetchUrls, loadMore, updateUrl, deleteUrl } = useUrls();
   const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
@@ -22,8 +24,13 @@ export default function DashboardPage() {
   const avgClicks = urls.length ? Math.round(totalClicks / urls.length) : 0;
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="flex items-center justify-between">
+    <motion.div
+      variants={stagger}
+      initial="hidden"
+      animate="visible"
+      className="space-y-8"
+    >
+      <motion.div variants={fadeUp} className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Your{" "}
@@ -35,35 +42,34 @@ export default function DashboardPage() {
               : "Manage and track all your short links"}
           </p>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <motion.div variants={stagger} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard
           icon={<Link2 className="h-5 w-5" />}
           label="Total links"
           value={urls.length}
           gradient="from-orange-500/20 to-amber-500/10"
-          delay={0}
         />
         <StatCard
           icon={<MousePointerClick className="h-5 w-5" />}
           label="Total clicks"
           value={totalClicks}
           gradient="from-primary/20 to-orange-500/10"
-          delay={100}
         />
         <StatCard
           icon={<TrendingUp className="h-5 w-5" />}
           label="Avg. clicks per link"
           value={avgClicks}
           gradient="from-emerald-500/20 to-teal-500/10"
-          delay={200}
         />
-      </div>
+      </motion.div>
 
-      <ShortenForm />
+      <motion.div variants={fadeUp}>
+        <ShortenForm />
+      </motion.div>
 
-      <section>
+      <motion.section variants={fadeUp}>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
             All links
@@ -82,8 +88,8 @@ export default function DashboardPage() {
           onDelete={deleteUrl}
           onLoadMore={loadMore}
         />
-      </section>
-    </div>
+      </motion.section>
+    </motion.div>
   );
 }
 
@@ -92,18 +98,17 @@ function StatCard({
   label,
   value,
   gradient,
-  delay,
 }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   gradient: string;
-  delay: number;
 }) {
   return (
-    <div
-      className="glass-card relative rounded-2xl p-5 animate-slide-up overflow-hidden"
-      style={{ animationDelay: `${delay}ms` }}
+    <motion.div
+      variants={itemVariants}
+      whileHover={{ y: -3, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+      className="glass-card relative rounded-2xl p-5 overflow-hidden cursor-default"
     >
       <div
         aria-hidden
@@ -122,6 +127,6 @@ function StatCard({
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

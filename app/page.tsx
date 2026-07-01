@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { fadeUp, fadeIn, stagger, scaleIn, itemVariants } from "@/lib/motion";
+import { fadeUp, stagger, staggerFast, scaleIn, itemVariants } from "@/lib/motion";
 
 const features = [
   {
@@ -61,23 +61,37 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-dvh bg-background overflow-hidden">
       {/* Background decorations */}
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
         aria-hidden
         className="pointer-events-none fixed -top-48 -left-48 h-[600px] w-[600px] rounded-full opacity-15 blur-3xl"
         style={{ background: "radial-gradient(circle, oklch(0.65 0.21 35), transparent)" }}
       />
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
         aria-hidden
         className="pointer-events-none fixed -bottom-48 -right-48 h-[600px] w-[600px] rounded-full opacity-10 blur-3xl"
         style={{ background: "radial-gradient(circle, oklch(0.82 0.16 70), transparent)" }}
       />
 
       {/* Nav */}
-      <header className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <motion.header
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 24 }}
+        className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"
+      >
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md transition-transform duration-200 group-hover:scale-110">
+          <motion.div
+            whileHover={{ scale: 1.1, rotate: -5 }}
+            className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md"
+          >
             <Link2 className="h-4 w-4" />
-          </div>
+          </motion.div>
           <span className="text-gradient text-lg font-bold tracking-tight">Snip</span>
         </Link>
 
@@ -95,27 +109,32 @@ export default function LandingPage() {
             </Button>
           </Link>
         </div>
-      </header>
+      </motion.header>
 
       {/* Hero */}
       <section className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 pt-20 pb-16 sm:pt-32 sm:pb-24 text-center">
-        <div className="animate-fade-in">
-          <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col items-center"
+        >
+          <motion.div variants={fadeUp} className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary">
             <Star className="h-3.5 w-3.5 fill-primary" />
             Free forever — no credit card required
-          </div>
+          </motion.div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight">
+          <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight">
             Shorten links,{" "}
             <span className="text-gradient">amplify impact</span>
-          </h1>
+          </motion.h1>
 
-          <p className="mt-6 mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed">
+          <motion.p variants={fadeUp} className="mt-6 mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed">
             Create clean, trustworthy short links that people love to click.
             Track performance with real-time analytics — all for free.
-          </p>
+          </motion.p>
 
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <motion.div variants={fadeUp} className="mt-10 flex items-center justify-center gap-4">
             <Link href="/register">
               <Button
                 size="lg"
@@ -134,12 +153,21 @@ export default function LandingPage() {
                 Sign in
               </Button>
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Hero visual */}
-        <div className="mt-16 sm:mt-24 mx-auto max-w-4xl animate-slide-up">
-          <div className="glass-card rounded-2xl p-1 overflow-hidden shadow-2xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-16 sm:mt-24 mx-auto max-w-4xl"
+        >
+          <motion.div
+            whileHover={{ scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="glass-card rounded-2xl p-1 overflow-hidden shadow-2xl"
+          >
             <div className="rounded-xl bg-background p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row items-stretch gap-3">
                 <div className="flex-1 relative">
@@ -164,41 +192,66 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Stats strip */}
-      <section className="relative z-10 border-y border-border/40 bg-muted/30">
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 border-y border-border/40 bg-muted/30"
+      >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+          <motion.div
+            variants={staggerFast}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-8"
+          >
             {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
+              <motion.div key={stat.label} variants={scaleIn} className="text-center">
                 <p className="text-2xl sm:text-3xl font-bold text-foreground">{stat.value}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Features */}
       <section className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 py-20 sm:py-28">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
             Everything you need
           </h2>
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
             Powerful features packed into a simple, clean interface.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid sm:grid-cols-3 gap-6">
-          {features.map((feature, i) => (
-            <div
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          className="grid sm:grid-cols-3 gap-6"
+        >
+          {features.map((feature) => (
+            <motion.div
               key={feature.title}
-              className="glass-card rounded-2xl p-8 animate-slide-up"
-              style={{ animationDelay: `${i * 100}ms` }}
+              variants={itemVariants}
+              whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+              className="glass-card rounded-2xl p-8"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary mb-5">
                 <feature.icon className="h-6 w-6" />
@@ -209,14 +262,20 @@ export default function LandingPage() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {feature.desc}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* CTA */}
       <section className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 pb-20 sm:pb-28">
-        <div className="glass-card rounded-3xl p-10 sm:p-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="glass-card rounded-3xl p-10 sm:p-16 text-center"
+        >
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
             Ready to{" "}
             <span className="text-gradient">simplify</span> your links?
@@ -233,11 +292,16 @@ export default function LandingPage() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
-        </div>
+        </motion.div>
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-border/40 py-8">
+      <motion.footer
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="relative z-10 border-t border-border/40 py-8"
+      >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Link2 className="h-4 w-4" />
@@ -249,7 +313,7 @@ export default function LandingPage() {
             <Link href="/register" className="hover:text-foreground transition-colors">Register</Link>
           </div>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   );
 }

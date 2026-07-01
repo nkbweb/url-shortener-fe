@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { motion } from "framer-motion";
 import {
-  Link2,
   Hash,
   Loader2,
   Zap,
@@ -33,7 +33,6 @@ type ShortenFormValues = z.infer<typeof shortenSchema>;
 
 export function ShortenForm() {
   const { shorten, isShortenLoading } = useUrls();
-  const [urlPreview, setUrlPreview] = useState<string | null>(null);
 
   const {
     register,
@@ -53,16 +52,29 @@ export function ShortenForm() {
       ...(data.shortCode ? { shortCode: data.shortCode } : {}),
     }).catch(() => {});
     reset();
-    setUrlPreview(null);
   };
 
   return (
-    <div className="glass-card rounded-2xl overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 24 }}
+      className="glass-card rounded-2xl overflow-hidden"
+    >
       {/* Header */}
-      <div className="flex items-center gap-3 px-6 pt-5 pb-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-orange-500 shadow-md shadow-primary/25">
+      <motion.div
+        initial={{ opacity: 0, x: -8 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.1 }}
+        className="flex items-center gap-3 px-6 pt-5 pb-3"
+      >
+        <motion.div
+          whileHover={{ rotate: 15 }}
+          transition={{ type: "spring", stiffness: 200, damping: 10 }}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-orange-500 shadow-md shadow-primary/25"
+        >
           <Zap className="h-4 w-4 text-primary-foreground" />
-        </div>
+        </motion.div>
         <div>
           <h2 className="text-base font-semibold text-foreground">
             Shorten a URL
@@ -71,7 +83,7 @@ export function ShortenForm() {
             Paste a long URL and get a short link in seconds
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Form */}
       <form
@@ -86,7 +98,13 @@ export function ShortenForm() {
               <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
                 {watchedUrl && !errors.originalUrl && (
-                  <Check className="h-4 w-4 text-emerald-500 animate-scale-in" />
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  >
+                    <Check className="h-4 w-4 text-emerald-500" />
+                  </motion.span>
                 )}
               </div>
               <Input
@@ -102,9 +120,13 @@ export function ShortenForm() {
               />
             </div>
             {errors.originalUrl && (
-              <p className="text-xs text-destructive flex items-center gap-1 animate-slide-up">
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-xs text-destructive flex items-center gap-1"
+              >
                 {errors.originalUrl.message}
-              </p>
+              </motion.p>
             )}
           </div>
 
@@ -121,33 +143,39 @@ export function ShortenForm() {
               />
             </div>
             {errors.shortCode && (
-              <p className="text-xs text-destructive animate-slide-up">
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-xs text-destructive"
+              >
                 {errors.shortCode.message}
-              </p>
+              </motion.p>
             )}
           </div>
 
           {/* Submit */}
-          <Button
-            id="shorten-submit-btn"
-            type="submit"
-            disabled={isShortenLoading}
-            className="h-11 px-6 rounded-xl font-semibold btn-glow bg-primary text-primary-foreground hover:bg-primary/90 whitespace-nowrap transition-all duration-200 shrink-0"
-          >
-            {isShortenLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Shortening…
-              </>
-            ) : (
-              <>
-                Shorten
-                <Zap className="ml-1.5 h-4 w-4" />
-              </>
-            )}
-          </Button>
+          <motion.div whileTap={{ scale: 0.97 }}>
+            <Button
+              id="shorten-submit-btn"
+              type="submit"
+              disabled={isShortenLoading}
+              className="h-11 px-6 rounded-xl font-semibold btn-glow bg-primary text-primary-foreground hover:bg-primary/90 whitespace-nowrap transition-all duration-200 shrink-0 w-full sm:w-auto"
+            >
+              {isShortenLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Shortening…
+                </>
+              ) : (
+                <>
+                  Shorten
+                  <Zap className="ml-1.5 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </motion.div>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 }

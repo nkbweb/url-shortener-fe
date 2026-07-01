@@ -52,11 +52,11 @@ export const smoothTransition: Transition = {
   ease: [0.16, 1, 0.3, 1],
 };
 
-export const itemVariants = {
+export const itemVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 260, damping: 24 },
+    transition: { type: "spring", stiffness: 260, damping: 24 } as const,
   },
 };
