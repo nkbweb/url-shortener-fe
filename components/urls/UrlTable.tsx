@@ -45,6 +45,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { EditUrlDialog } from "./EditUrlDialog";
+import { QrCodeDialog } from "./QrCodeDialog";
 
 interface UrlTableProps {
   urls: ShortUrl[];
@@ -63,6 +64,8 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<ShortUrl | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [qrTarget, setQrTarget] = useState<ShortUrl | null>(null);
+  const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
   const filtered = useMemo(() => {
     if (!searchQuery.trim()) return urls;
@@ -296,15 +299,13 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <a
-                              href={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(getRedirectUrl(url.shortCode))}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <button
                               aria-label="QR code"
+                              onClick={() => { setQrTarget(url); setQrDialogOpen(true); }}
                               className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150"
                             >
                               <QrCode className="h-4 w-4" />
-                            </a>
+                            </button>
                           </TooltipTrigger>
                           <TooltipContent side="top">QR Code</TooltipContent>
                         </Tooltip>
@@ -389,6 +390,16 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
           </TableBody>
         </Table>
       </motion.div>
+
+      {/* QR dialog */}
+      {qrTarget && (
+        <QrCodeDialog
+          shortUrl={getRedirectUrl(qrTarget.shortCode)}
+          shortCode={qrTarget.shortCode}
+          open={qrDialogOpen}
+          onOpenChange={(open) => { setQrDialogOpen(open); if (!open) setQrTarget(null); }}
+        />
+      )}
 
       {/* Edit dialog */}
       {editTarget && (
