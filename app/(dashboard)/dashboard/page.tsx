@@ -10,7 +10,7 @@ import { useAuthStore } from "@/lib/stores/authStore";
 import { stagger, fadeUp, itemVariants, springUp, staggerSpring } from "@/lib/motion";
 
 export default function DashboardPage() {
-  const { urls, isLoading, hasMore, fetchUrls, loadMore, updateUrl, deleteUrl } = useUrls();
+  const { urls, isLoading, hasMore, fetchUrls, loadMore, updateUrl, deleteUrl, shorten, isShortenLoading } = useUrls();
   const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
@@ -98,7 +98,7 @@ export default function DashboardPage() {
 
       {/* Shorten form */}
       <motion.div variants={fadeUp}>
-        <ShortenForm />
+        <ShortenForm shorten={shorten} isShortenLoading={isShortenLoading} />
       </motion.div>
 
       {/* URL table section */}

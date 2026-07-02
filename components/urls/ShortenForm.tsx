@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUrls } from "@/lib/hooks/useUrls";
+import type { ShortUrl, ShortenPayload } from "@/lib/types/url.types";
 
 const shortenSchema = z.object({
   originalUrl: z
@@ -30,8 +30,7 @@ const shortenSchema = z.object({
 
 type ShortenFormValues = z.infer<typeof shortenSchema>;
 
-export function ShortenForm() {
-  const { shorten, isShortenLoading } = useUrls();
+export function ShortenForm({ shorten, isShortenLoading }: { shorten: (payload: ShortenPayload) => Promise<ShortUrl>; isShortenLoading: boolean }) {
 
   const {
     register,
