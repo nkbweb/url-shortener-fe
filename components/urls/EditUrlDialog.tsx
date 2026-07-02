@@ -41,38 +41,48 @@ export function EditUrlDialog({ url, open, onOpenChange, onSave }: EditUrlDialog
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md rounded-2xl border-border/50">
         <DialogHeader>
-          <DialogTitle>Edit URL</DialogTitle>
+          <DialogTitle className="text-lg text-foreground">Edit URL</DialogTitle>
           <DialogDescription>
             Update the original URL or custom short code.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
           <div className="space-y-2">
-            <label htmlFor="originalUrl" className="text-sm font-medium">Original URL</label>
+            <label htmlFor="originalUrl" className="text-sm font-medium text-foreground">
+              Original URL
+            </label>
             <Input
               id="originalUrl"
               value={originalUrl}
               onChange={(e) => setOriginalUrl(e.target.value)}
               placeholder="https://example.com/long-url"
+              className="rounded-xl bg-muted/30 border-border/60 focus:border-primary"
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="shortCode" className="text-sm font-medium">Short Code</label>
+            <label htmlFor="shortCode" className="text-sm font-medium text-foreground">
+              Short Code
+            </label>
             <Input
               id="shortCode"
               value={shortCode}
               onChange={(e) => setShortCode(e.target.value)}
               placeholder="my-custom-code"
+              className="rounded-xl bg-muted/30 border-border/60 focus:border-primary"
             />
           </div>
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="rounded-xl">Cancel</Button>
           </DialogClose>
-          <Button onClick={handleSave} disabled={!hasChanges || saving}>
+          <Button
+            onClick={handleSave}
+            disabled={!hasChanges || saving}
+            className="rounded-xl shadow-lg shadow-primary/25"
+          >
             {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Save
           </Button>

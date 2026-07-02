@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   Loader2,
   ChevronDown,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -94,7 +95,7 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="glass-card rounded-2xl p-6 space-y-3"
+        className="rounded-2xl border border-border/50 bg-card p-6 space-y-3"
       >
         {[...Array(4)].map((_, i) => (
           <motion.div
@@ -114,13 +115,13 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card rounded-2xl p-12 text-center"
+        className="rounded-2xl border border-border/50 bg-card p-12 text-center"
       >
         <motion.div
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-orange-500/10"
+          className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10"
         >
           <ExternalLink className="h-8 w-8 text-primary" />
         </motion.div>
@@ -134,51 +135,53 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
 
   return (
     <>
+      {/* Search bar */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
-        className="mb-3 relative"
+        className="relative mb-4"
       >
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search links by URL or short code…"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9 h-10 rounded-xl bg-muted/30 border-border/60 focus:border-primary transition-all"
+          className="pl-10 h-10 rounded-xl bg-muted/30 border-border/60 focus:border-primary transition-all pr-10"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
           >
-            Clear
+            <X className="h-4 w-4" />
           </button>
         )}
       </motion.div>
 
+      {/* Table card */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15 }}
-        className="glass-card rounded-2xl overflow-hidden"
+        className="rounded-2xl border border-border/50 bg-card overflow-hidden"
       >
         <Table>
           <TableHeader>
-            <TableRow className="border-border/60 hover:bg-transparent">
-              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-6">
+            <TableRow className="border-border/50 hover:bg-transparent">
+              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-6 py-4">
                 Original URL
               </TableHead>
-              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider py-4">
                 Short link
               </TableHead>
-              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center w-20">
+              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center w-20 py-4">
                 Clicks
               </TableHead>
-              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden sm:table-cell">
+              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden sm:table-cell py-4">
                 Created
               </TableHead>
-              <TableHead className="pr-4 w-36" />
+              <TableHead className="pr-4 w-36 py-4" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -197,13 +200,13 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
               filtered.map((url, i) => (
                 <motion.tr
                   key={url.id}
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.03, type: "spring", stiffness: 260, damping: 24 }}
                   data-slot="table-row"
-                  className="border-b border-border/40 transition-colors hover:bg-muted/30 group"
+                  className="border-b border-border/40 transition-colors hover:bg-muted/20 group"
                 >
-                  <TableCell className="pl-6 max-w-[240px]">
+                  <TableCell className="pl-6 max-w-[240px] py-4">
                     <a
                       href={url.originalUrl}
                       target="_blank"
@@ -216,7 +219,7 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                     </a>
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell className="py-4">
                     <div className="flex items-center gap-2">
                       <a
                         href={getRedirectUrl(url.shortCode)}
@@ -226,29 +229,27 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                       >
                         /{url.shortCode}
                       </a>
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
+                      <button
                         aria-label="Copy short URL"
                         onClick={() => copyToClipboard(url)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10"
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
                       >
                         {copiedId === url.id ? (
-                          <Check className="h-3 w-3 text-green-500" />
+                          <Check className="h-3.5 w-3.5 text-emerald-500" />
                         ) : (
-                          <Copy className="h-3 w-3" />
+                          <Copy className="h-3.5 w-3.5" />
                         )}
-                      </Button>
+                      </button>
                     </div>
                   </TableCell>
 
-                  <TableCell className="text-center">
+                  <TableCell className="text-center py-4">
                     <span className="inline-flex items-center justify-center min-w-[2.5rem] rounded-full bg-gradient-to-r from-accent/30 to-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent-foreground tabular-nums">
                       {url.clicks}
                     </span>
                   </TableCell>
 
-                  <TableCell className="text-sm text-muted-foreground whitespace-nowrap hidden sm:table-cell">
+                  <TableCell className="text-sm text-muted-foreground whitespace-nowrap hidden sm:table-cell py-4">
                     {new Date(url.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -256,66 +257,77 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                     })}
                   </TableCell>
 
-                  <TableCell className="pr-4">
-                    <div className="flex items-center justify-end gap-1">
-                      {/* Analytics */}
+                  <TableCell className="pr-4 py-4">
+                    <div className="flex items-center justify-end gap-0.5">
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Link
                               href={`/analytics/${url.shortCode}`}
                               aria-label="View analytics"
-                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors duration-150"
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150"
                             >
                               <BarChart3 className="h-4 w-4" />
                             </Link>
                           </TooltipTrigger>
-                          <TooltipContent side="top">
-                            View analytics
-                          </TooltipContent>
+                          <TooltipContent side="top">Analytics</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
 
-                      {/* QR code */}
-                      <a
-                        href={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(getRedirectUrl(url.shortCode))}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="QR code"
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors duration-150 opacity-0 group-hover:opacity-100"
-                      >
-                        <QrCode className="h-4 w-4" />
-                      </a>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <a
+                              href={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(getRedirectUrl(url.shortCode))}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="QR code"
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150"
+                            >
+                              <QrCode className="h-4 w-4" />
+                            </a>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">QR Code</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
 
-                      {/* Edit */}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label="Edit URL"
-                        onClick={() => { setEditTarget(url); setEditDialogOpen(true); }}
-                        className="h-8 w-8 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors duration-150"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              aria-label="Edit URL"
+                              onClick={() => { setEditTarget(url); setEditDialogOpen(true); }}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">Edit</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
 
-                      {/* Delete */}
                       <Dialog open={deleteDialogOpen && deleteTarget?.id === url.id} onOpenChange={(open) => { setDeleteDialogOpen(open); if (!open) setDeleteTarget(null); }}>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label="Delete URL"
-                            disabled={deletingId === url.id}
-                            onClick={() => { setDeleteTarget(url); setDeleteDialogOpen(true); }}
-                            className="h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-150"
-                          >
-                            {deletingId === url.id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Trash2 className="h-4 w-4" />
-                            )}
-                          </Button>
-                        </DialogTrigger>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <DialogTrigger asChild>
+                                <button
+                                  aria-label="Delete URL"
+                                  disabled={deletingId === url.id}
+                                  onClick={() => { setDeleteTarget(url); setDeleteDialogOpen(true); }}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-150"
+                                >
+                                  {deletingId === url.id ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="h-4 w-4" />
+                                  )}
+                                </button>
+                              </DialogTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">Delete</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                         <DialogContent className="sm:max-w-sm">
                           <DialogHeader>
                             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-destructive/10 mb-2">
@@ -375,14 +387,14 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-4 text-center"
+          className="mt-5 text-center"
         >
           <motion.div whileTap={{ scale: 0.97 }}>
             <Button
               variant="outline"
               onClick={onLoadMore}
               disabled={isLoading}
-              className="rounded-xl px-8"
+              className="rounded-xl px-8 border-border/60"
             >
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

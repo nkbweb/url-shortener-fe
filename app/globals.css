@@ -51,86 +51,85 @@
    ============================================================ */
 :root {
   /* Primary — vivid warm orange */
-  --primary:             oklch(0.65 0.21 35);   /* #FF6B2C */
-  --primary-foreground:  oklch(1 0 0);           /* white */
-  --primary-hover:       oklch(0.59 0.22 35);   /* deeper orange */
-  --primary-glow:        oklch(0.65 0.21 35 / 25%);
+  --primary:             oklch(0.62 0.22 35);   /* #F55D20 */
+  --primary-foreground:  oklch(1 0 0);
+  --primary-hover:       oklch(0.55 0.24 35);
+  --primary-glow:        oklch(0.62 0.22 35 / 25%);
 
-  /* Backgrounds */
-  --background:          oklch(0.98 0.01 70);   /* warm cream */
-  --foreground:          oklch(0.15 0.02 35);   /* warm near-black */
+  /* Backgrounds — clean, crisp */
+  --background:          oklch(0.975 0.005 60); /* clean warm off-white */
+  --foreground:          oklch(0.12 0.015 35);  /* richer near-black */
 
   /* Cards & surfaces */
   --card:                oklch(1 0 0);
-  --card-foreground:     oklch(0.15 0.02 35);
+  --card-foreground:     oklch(0.12 0.015 35);
   --popover:             oklch(1 0 0);
-  --popover-foreground:  oklch(0.15 0.02 35);
+  --popover-foreground:  oklch(0.12 0.015 35);
 
   /* Muted */
-  --muted:               oklch(0.94 0.02 60);   /* warm light fill */
-  --muted-foreground:    oklch(0.52 0.04 40);
+  --muted:               oklch(0.92 0.01 55);   /* defined fill */
+  --muted-foreground:    oklch(0.40 0.03 40);   /* much darker for readability */
 
   /* Secondary */
-  --secondary:           oklch(0.94 0.02 60);
-  --secondary-foreground:oklch(0.25 0.04 35);
+  --secondary:           oklch(0.92 0.01 55);
+  --secondary-foreground:oklch(0.22 0.025 35);
 
-  /* Accent — amber gold */
-  --accent:              oklch(0.82 0.16 70);   /* #FFB347 */
-  --accent-foreground:   oklch(0.15 0.02 35);
+  /* Accent — warm amber gold */
+  --accent:              oklch(0.78 0.18 65);   /* #F5A623 */
+  --accent-foreground:   oklch(0.12 0.015 35);
 
   /* Destructive */
-  --destructive:         oklch(0.55 0.22 25);   /* deep red */
+  --destructive:         oklch(0.52 0.22 25);
   --destructive-foreground: oklch(1 0 0);
 
-  /* Borders & inputs */
-  --border:              oklch(0.88 0.03 60);
-  --input:               oklch(0.92 0.02 60);
-  --ring:                oklch(0.65 0.21 35 / 50%);
+  /* Borders & inputs — clearly visible */
+  --border:              oklch(0.78 0.02 50);
+  --input:               oklch(0.84 0.02 50);
+  --ring:                oklch(0.62 0.22 35 / 45%);
 
-  /* Radius */
   --radius: 0.75rem;
 }
 
 /* ============================================================
-   Dark mode design tokens — Clean neutral dark
+   Dark mode design tokens — Midnight Navy ✦ Gold
    ============================================================ */
 .dark {
-  /* Primary — lighter orange for dark bg */
-  --primary:             oklch(0.72 0.19 35);   /* #FF8C57 */
-  --primary-foreground:  oklch(1 0 0);
-  --primary-hover:       oklch(0.78 0.17 35);
-  --primary-glow:        oklch(0.72 0.19 35 / 30%);
+  /* Primary — refined gold */
+  --primary:             oklch(0.76 0.13 75);
+  --primary-foreground:  oklch(0.12 0.02 30);
+  --primary-hover:       oklch(0.81 0.11 75);
+  --primary-glow:        oklch(0.76 0.13 75 / 25%);
 
-  /* Backgrounds — clean dark charcoal */
-  --background:          oklch(0.13 0.01 30);   /* #1C1A19 */
-  --foreground:          oklch(0.96 0.005 30);  /* cool off-white */
+  /* Background — deep navy blue */
+  --background:          oklch(0.10 0.030 270);  /* #0C1122 */
+  --foreground:          oklch(0.99 0 0);          /* pure white */
 
-  /* Cards & surfaces */
-  --card:                oklch(0.17 0.01 30);   /* #242221 */
-  --card-foreground:     oklch(0.96 0.005 30);
-  --popover:             oklch(0.17 0.01 30);
-  --popover-foreground:  oklch(0.96 0.005 30);
+  /* Cards — subtly lifted, blue surface */
+  --card:                oklch(0.16 0.035 260);  /* #182242 */
+  --card-foreground:     oklch(0.99 0 0);
+  --popover:             oklch(0.16 0.035 260);
+  --popover-foreground:  oklch(0.99 0 0);
 
-  /* Muted */
-  --muted:               oklch(0.21 0.01 30);   /* #2E2C2B */
-  --muted-foreground:    oklch(0.58 0.02 40);
+  /* Muted — one layer above card */
+  --muted:               oklch(0.20 0.035 260);  /* #202E52 */
+  --muted-foreground:    oklch(0.88 0.008 260);  /* #D0DAEC — bright, crisp */
 
   /* Secondary */
-  --secondary:           oklch(0.21 0.01 30);
-  --secondary-foreground:oklch(0.96 0.005 30);
+  --secondary:           oklch(0.20 0.035 260);
+  --secondary-foreground:oklch(0.99 0 0);
 
-  /* Accent */
-  --accent:              oklch(0.68 0.15 65);   /* #D98E2A */
-  --accent-foreground:   oklch(0.96 0.005 30);
+  /* Accent — cool blue */
+  --accent:              oklch(0.58 0.10 260);
+  --accent-foreground:   oklch(0.99 0 0);
 
   /* Destructive */
-  --destructive:         oklch(0.65 0.20 25);   /* #F87171 */
+  --destructive:         oklch(0.58 0.18 25);
   --destructive-foreground: oklch(1 0 0);
 
-  /* Borders & inputs */
-  --border:              oklch(1 0 0 / 8%);
-  --input:               oklch(1 0 0 / 10%);
-  --ring:                oklch(0.72 0.19 35 / 50%);
+  /* Borders & inputs — visible but subtle */
+  --border:              oklch(1 0 0 / 14%);
+  --input:               oklch(1 0 0 / 16%);
+  --ring:                oklch(0.76 0.13 75 / 50%);
 }
 
 /* ============================================================
@@ -175,8 +174,8 @@
   .text-gradient {
     background: linear-gradient(
       135deg,
-      oklch(0.65 0.21 35),
-      oklch(0.75 0.18 55)
+      oklch(0.62 0.22 35),
+      oklch(0.72 0.20 50)
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -186,8 +185,8 @@
   .dark .text-gradient {
     background: linear-gradient(
       135deg,
-      oklch(0.72 0.19 35),
-      oklch(0.82 0.16 60)
+      oklch(0.80 0.13 75),
+      oklch(0.90 0.06 85)
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -199,18 +198,18 @@
     background: oklch(1 0 0 / 60%);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid oklch(0.88 0.03 60);
+    border: 1px solid oklch(0.78 0.02 50 / 40%);
     box-shadow:
       0 4px 24px oklch(0.65 0.21 35 / 8%),
-      0 1px 4px oklch(0 0 0 / 5%);
+      0 1px 4px oklch(0 0 0 / 4%);
   }
 
   .dark .glass-card {
-    background: oklch(0.16 0.03 35 / 70%);
-    border-color: oklch(1 0 0 / 8%);
+    background: oklch(0.16 0.035 260 / 60%);
+    border-color: oklch(1 0 0 / 14%);
     box-shadow:
-      0 4px 24px oklch(0 0 0 / 40%),
-      0 1px 4px oklch(0 0 0 / 20%);
+      0 2px 20px oklch(0 0 0 / 50%),
+      0 1px 4px oklch(0 0 0 / 30%);
   }
 
   /* Primary glow button effect */
@@ -287,6 +286,17 @@
     50%      { transform: translateY(-12px); }
   }
 
+  /* Shimmer for gradient text */
+  .text-gradient-shimmer {
+    background-size: 200% auto !important;
+    animation: shimmer 5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+
   /* Gradient borders */
   .gradient-border {
     position: relative;
@@ -298,11 +308,15 @@
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, oklch(0.65 0.21 35), oklch(0.82 0.16 70));
+    background: linear-gradient(135deg, oklch(0.62 0.22 35), oklch(0.78 0.18 65));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
+  }
+
+  .dark .gradient-border::before {
+    background: linear-gradient(135deg, oklch(0.76 0.13 75), oklch(0.55 0.08 260));
   }
 
   /* Scrollbar styling */
@@ -316,17 +330,17 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: oklch(0.88 0.03 60);
+    background: oklch(0.78 0.02 50 / 50%);
     border-radius: 3px;
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    background: oklch(1 0 0 / 15%);
+    background: oklch(0.55 0.02 260 / 25%);
   }
 
   /* Selection */
   ::selection {
-    background: oklch(0.65 0.21 35 / 25%);
+    background: oklch(0.62 0.22 35 / 25%);
     color: inherit;
   }
 }

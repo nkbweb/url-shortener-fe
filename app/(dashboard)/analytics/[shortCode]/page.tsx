@@ -91,7 +91,7 @@ export default function AnalyticsPage() {
           icon={<MousePointerClick className="h-5 w-5" />}
           label="Total clicks"
           value={analytics.total}
-          gradient="from-primary/20 to-orange-500/10"
+          gradient="from-primary/15 to-primary/5"
         />
         <AnalyticsStatCard
           icon={<Calendar className="h-5 w-5" />}
@@ -133,7 +133,7 @@ export default function AnalyticsPage() {
                   className="flex-1 flex flex-col items-center gap-1 group relative"
                 >
                   <div
-                    className="w-full rounded-sm bg-gradient-to-t from-primary to-orange-400 transition-all duration-200 hover:opacity-80 min-h-[4px]"
+                    className="w-full rounded-sm bg-gradient-to-t from-primary to-primary/60 transition-all duration-200 hover:opacity-80 min-h-[4px]"
                     style={{ height: `${Math.max(height, 4)}%` }}
                   />
                   <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-popover text-popover-foreground text-xs px-2 py-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
@@ -178,7 +178,7 @@ export default function AnalyticsPage() {
                     </div>
                     <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-orange-400"
+                        className="h-full rounded-full bg-gradient-to-r from-primary to-primary/60"
                         style={{ width: `${(ref.count / maxRef) * 100}%` }}
                       />
                     </div>

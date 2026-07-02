@@ -17,7 +17,7 @@ export default function LoginPage() {
     <LoginAnimation>
       {/* Brand showcase — hidden on small screens */}
       <div className="hidden lg:flex flex-1 flex-col justify-center pr-12">
-        <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-orange-500 shadow-lg shadow-primary/30">
+        <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg shadow-primary/30">
           <LinkIcon className="h-7 w-7 text-primary-foreground" />
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -46,7 +46,7 @@ export default function LoginPage() {
           {/* Mobile header */}
           <div className="lg:hidden mb-8 text-center">
             <div className="mb-4 flex justify-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-orange-500 shadow-lg shadow-primary/30">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg shadow-primary/30">
                 <LinkIcon className="h-7 w-7 text-primary-foreground" />
               </div>
             </div>
