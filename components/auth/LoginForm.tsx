@@ -94,6 +94,16 @@ export function LoginForm() {
         )}
       </div>
 
+      {/* Forgot password */}
+      <div className="flex justify-end -mt-3">
+        <Link
+          href="/forgot-password"
+          className="text-xs text-muted-foreground hover:text-primary transition-colors"
+        >
+          Forgot password?
+        </Link>
+      </div>
+
       {/* Submit */}
       <Button
         id="login-submit-btn"
@@ -104,7 +114,7 @@ export function LoginForm() {
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Signing in…
+            Signing in...
           </>
         ) : (
           <>

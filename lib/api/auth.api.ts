@@ -28,4 +28,10 @@ export const authApi = {
 
   logout: () =>
     apiClient.post<{ message: string }>("/api/auth/logout"),
+
+  forgotPassword: (email: string) =>
+    apiClient.post<{ message: string }>("/api/auth/forgot-password", { email }),
+
+  resetPassword: (token: string, newPassword: string) =>
+    apiClient.post<{ message: string }>("/api/auth/reset-password", { token, newPassword }),
 };
