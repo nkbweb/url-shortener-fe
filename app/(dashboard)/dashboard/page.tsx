@@ -59,8 +59,18 @@ export default function DashboardPage() {
         variants={fadeUp}
         className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-primary/5 via-card to-card p-6 sm:p-8"
       >
-        <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-accent/10 blur-3xl" />
+        <motion.div
+          aria-hidden
+          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl"
+        />
+        <motion.div
+          aria-hidden
+          animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="pointer-events-none absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-accent/10 blur-3xl"
+        />
         <div className="relative z-10 flex items-start justify-between">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">

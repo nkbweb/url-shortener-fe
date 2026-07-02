@@ -208,11 +208,15 @@ export default function LandingPage() {
           </motion.div>
 
           {/* Train heading */}
-          <div className="relative w-full overflow-hidden">
+          <motion.div
+            variants={fadeUp}
+            className="relative w-full overflow-hidden"
+          >
             <motion.h1
               className="flex w-max"
+              initial={{ x: "0%" }}
               animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 28, repeat: Infinity, ease: "linear", delay: 0.6 }}
+              transition={{ duration: 28, repeat: Infinity, ease: "linear", delay: 0.8 }}
             >
               {[0, 1].map((copy) => (
                 <span
@@ -230,7 +234,7 @@ export default function LandingPage() {
                 </span>
               ))}
             </motion.h1>
-          </div>
+          </motion.div>
 
           <motion.p
             variants={fadeUp}

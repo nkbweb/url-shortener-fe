@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Copy,
   Trash2,
@@ -229,17 +229,36 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                       >
                         /{url.shortCode}
                       </a>
-                      <button
+                      <motion.button
                         aria-label="Copy short URL"
                         onClick={() => copyToClipboard(url)}
+                        whileTap={{ scale: 0.85 }}
                         className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
                       >
-                        {copiedId === url.id ? (
-                          <Check className="h-3.5 w-3.5 text-emerald-500" />
-                        ) : (
-                          <Copy className="h-3.5 w-3.5" />
-                        )}
-                      </button>
+                        <AnimatePresence mode="wait">
+                          {copiedId === url.id ? (
+                            <motion.span
+                              key="check"
+                              initial={{ scale: 0, rotate: -45 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              exit={{ scale: 0, rotate: 45 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                            >
+                              <Check className="h-3.5 w-3.5 text-emerald-500" />
+                            </motion.span>
+                          ) : (
+                            <motion.span
+                              key="copy"
+                              initial={{ scale: 0, rotate: 45 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              exit={{ scale: 0, rotate: -45 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                            >
+                              <Copy className="h-3.5 w-3.5" />
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      </motion.button>
                     </div>
                   </TableCell>
 
