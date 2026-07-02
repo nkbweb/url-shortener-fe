@@ -62,7 +62,7 @@ export function LoginForm() {
             placeholder="you@example.com"
             autoComplete="email"
             {...register("email")}
-            className="pl-9 h-11 rounded-xl bg-muted/50 border-border/60 focus:border-primary focus:ring-primary/20 transition-all"
+            className="pl-9 h-11 rounded-xl bg-muted/30 border-border/60 focus:border-primary transition-all"
           />
         </div>
         {errors.email && (
@@ -86,7 +86,7 @@ export function LoginForm() {
             placeholder="••••••••"
             autoComplete="current-password"
             {...register("password")}
-            className="pl-9 h-11 rounded-xl bg-muted/50 border-border/60 focus:border-primary focus:ring-primary/20 transition-all"
+            className="pl-9 h-11 rounded-xl bg-muted/30 border-border/60 focus:border-primary transition-all"
           />
         </div>
         {errors.password && (

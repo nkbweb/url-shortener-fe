@@ -12,16 +12,15 @@ export default function AuthLayout({
 }) {
   return (
     <div className="relative min-h-dvh bg-background overflow-hidden">
-      {/* Warm gradient background blobs */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full opacity-20 blur-3xl"
-        style={{ background: "radial-gradient(circle, oklch(0.65 0.21 35), transparent)" }}
+        className="pointer-events-none fixed -top-48 -left-48 h-[600px] w-[600px] rounded-full opacity-15 blur-3xl"
+        style={{ background: "radial-gradient(circle, oklch(0.62 0.22 35), transparent)" }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full opacity-15 blur-3xl"
-        style={{ background: "radial-gradient(circle, oklch(0.82 0.16 70), transparent)" }}
+        className="pointer-events-none fixed -bottom-48 -right-48 h-[600px] w-[600px] rounded-full opacity-10 blur-3xl"
+        style={{ background: "radial-gradient(circle, oklch(0.78 0.18 65), transparent)" }}
       />
 
       {/* Theme toggle in top-right */}

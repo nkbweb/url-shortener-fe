@@ -9,7 +9,7 @@ import { Loader2, KeyRound, ShieldCheck, User, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { apiClient, ApiError } from "@/lib/api/client";
-import { fadeUp, stagger, itemVariants } from "@/lib/motion";
+import { fadeUp, stagger, itemVariants, staggerSpring } from "@/lib/motion";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -73,7 +73,7 @@ export default function SettingsPage() {
         </div>
       </motion.div>
 
-      <motion.div variants={stagger} className="grid gap-6 max-w-xl">
+      <motion.div variants={staggerSpring} initial="hidden" animate="visible" className="grid gap-6 max-w-xl">
         {/* Account info card */}
         <motion.div
           variants={itemVariants}

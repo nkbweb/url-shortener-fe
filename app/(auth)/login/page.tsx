@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LinkIcon, BarChart3, Shield, Zap } from "lucide-react";
+import { LinkIcon, BarChart3, Shield, Zap, Sparkles } from "lucide-react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { LoginAnimation } from "./animations";
 
@@ -15,7 +15,6 @@ const perks = [
 export default function LoginPage() {
   return (
     <LoginAnimation>
-      {/* Brand showcase — hidden on small screens */}
       <div className="hidden lg:flex flex-1 flex-col justify-center pr-12">
         <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg shadow-primary/30">
           <LinkIcon className="h-7 w-7 text-primary-foreground" />
@@ -40,9 +39,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Form card */}
       <div className="w-full lg:w-[400px]">
-        <div className="glass-card w-full rounded-2xl p-8">
+        <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card p-8">
           {/* Mobile header */}
           <div className="lg:hidden mb-8 text-center">
             <div className="mb-4 flex justify-center">

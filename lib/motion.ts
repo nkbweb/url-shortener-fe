@@ -60,3 +60,52 @@ export const itemVariants: Variants = {
     transition: { type: "spring", stiffness: 260, damping: 24 } as const,
   },
 };
+
+export const springUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 280,
+      damping: 22,
+      delay: i * 0.08,
+    },
+  }),
+};
+
+export const staggerSpring: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+export const staggerSlower: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+export const cardHover = {
+  rest: { scale: 1, y: 0 },
+  hover: {
+    scale: 1.02,
+    y: -4,
+    transition: { type: "spring", stiffness: 400, damping: 17 },
+  },
+  tap: {
+    scale: 0.98,
+    transition: { type: "spring", stiffness: 400, damping: 17 },
+  },
+};

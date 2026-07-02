@@ -200,11 +200,11 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
               filtered.map((url, i) => (
                 <motion.tr
                   key={url.id}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.03, type: "spring", stiffness: 260, damping: 24 }}
+                  initial={{ opacity: 0, y: 8, x: -4 }}
+                  animate={{ opacity: 1, y: 0, x: 0 }}
+                  transition={{ delay: i * 0.035, type: "spring", stiffness: 300, damping: 26 }}
                   data-slot="table-row"
-                  className="border-b border-border/40 transition-colors hover:bg-muted/20 group"
+                  className="border-b border-border/40 hover:bg-muted/20 group"
                 >
                   <TableCell className="pl-6 max-w-[240px] py-4">
                     <a

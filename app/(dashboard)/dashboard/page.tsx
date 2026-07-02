@@ -7,7 +7,7 @@ import { ShortenForm } from "@/components/urls/ShortenForm";
 import { UrlTable } from "@/components/urls/UrlTable";
 import { useUrls } from "@/lib/hooks/useUrls";
 import { useAuthStore } from "@/lib/stores/authStore";
-import { stagger, fadeUp, itemVariants } from "@/lib/motion";
+import { stagger, fadeUp, itemVariants, springUp, staggerSpring } from "@/lib/motion";
 
 export default function DashboardPage() {
   const { urls, isLoading, hasMore, fetchUrls, loadMore, updateUrl, deleteUrl } = useUrls();
@@ -80,7 +80,7 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* Stats grid */}
-      <motion.div variants={stagger} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <motion.div variants={staggerSpring} initial="hidden" animate="visible" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {stats.map((stat) => (
           <StatCard key={stat.label} {...stat} />
         ))}
@@ -132,8 +132,9 @@ function StatCard({
   return (
     <motion.div
       variants={itemVariants}
-      whileHover={{ y: -2, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-      className={`group relative rounded-2xl border border-border/50 bg-card p-5 transition-all duration-200 ${border}`}
+      whileHover={{ y: -3, scale: 1.01, transition: { type: "spring", stiffness: 350, damping: 18 } }}
+      whileTap={{ scale: 0.99, transition: { type: "spring", stiffness: 350, damping: 18 } }}
+      className={`group relative rounded-2xl border border-border/50 bg-card p-5 ${border}`}
     >
       <div
         aria-hidden

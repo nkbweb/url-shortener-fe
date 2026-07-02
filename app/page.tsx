@@ -30,22 +30,16 @@ const features = [
     icon: Zap,
     title: "Lightning Fast",
     desc: "Generate short links in milliseconds with our blazing-fast infrastructure.",
-    gradient: "from-primary/15 to-amber-500/10",
-    iconBg: "from-primary to-primary/60",
   },
   {
     icon: BarChart3,
     title: "Click Analytics",
     desc: "Track every click with detailed analytics and see where your traffic comes from.",
-    gradient: "from-accent/15 to-primary/5",
-    iconBg: "from-accent to-accent/60",
   },
   {
     icon: Shield,
     title: "Secure & Reliable",
     desc: "Enterprise-grade security with encrypted tokens and 99.9% uptime.",
-    gradient: "from-emerald-500/15 to-emerald-500/5",
-    iconBg: "from-emerald-500 to-emerald-500/60",
   },
 ];
 
@@ -238,14 +232,22 @@ export default function LandingPage() {
             </motion.h1>
           </div>
 
-          <motion.p variants={fadeUp} className="mt-6 mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed">
+          <motion.p
+            variants={fadeUp}
+            transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
+            className="mt-6 mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed"
+          >
             Create clean, trustworthy short links that people love to click.
             Track performance with real-time analytics — all for free.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mt-10 flex items-center justify-center gap-4">
+          <motion.div
+            variants={fadeUp}
+            transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
+            className="mt-10 flex items-center justify-center gap-4"
+          >
             <Link href="/register">
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                 <Button
                   size="lg"
                   className="h-12 px-8 rounded-xl text-base font-semibold btn-glow bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
@@ -279,7 +281,7 @@ export default function LandingPage() {
           <motion.div
             whileHover={{ scale: 1.01, y: -2 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="glass-card rounded-2xl p-1 overflow-hidden shadow-2xl"
+            className="rounded-2xl border border-border/50 bg-card overflow-hidden shadow-2xl"
           >
             <div className="rounded-xl bg-background p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row items-stretch gap-3">
@@ -386,18 +388,18 @@ export default function LandingPage() {
             <motion.div
               key={feature.title}
               variants={itemVariants}
-              whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+              whileHover={{ y: -6, transition: { type: "spring", stiffness: 350, damping: 18 } }}
+              whileTap={{ scale: 0.98 }}
               className="group relative rounded-2xl border border-border/50 bg-card p-8 overflow-hidden"
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ background: `linear-gradient(135deg, var(--primary), transparent)` }}
+                className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               />
               <div className="relative z-10">
                 <motion.div
                   whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
                   className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-5"
                 >
                   <feature.icon className="h-6 w-6" />
