@@ -20,7 +20,7 @@ import {
   CornerDownLeft,
   Loader2,
 } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { synth } from "@/lib/synth";
@@ -255,6 +255,10 @@ export function CommandPalette() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="p-0 overflow-hidden max-w-xl bg-card/95 border border-border/50 glass-card rounded-2xl shadow-2xl">
+          <DialogTitle className="sr-only">Command Palette Menu</DialogTitle>
+          <DialogDescription className="sr-only">
+            Search dashboard actions, toggle light or dark themes, and quickly shorten long links.
+          </DialogDescription>
           <div className="flex items-center border-b border-border/40 px-4 py-3">
             <Search className="h-4 w-4 text-muted-foreground shrink-0 mr-3" />
             <Input
