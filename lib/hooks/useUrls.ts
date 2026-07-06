@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { urlApi } from "@/lib/api/url.api";
+import { synth } from "@/lib/synth";
 import type { ShortUrl, ShortenPayload, PaginatedUrls, UpdateUrlPayload } from "@/lib/types/url.types";
 import { ApiError } from "@/lib/api/client";
 
@@ -46,6 +47,7 @@ export function useUrls() {
       const url: ShortUrl = (newUrl as { url?: ShortUrl }).url ?? newUrl;
       setUrls((prev) => [url, ...prev]);
       toast.success("Short URL created!");
+      synth.playSuccess();
       return url;
     } catch (err) {
       const message =
@@ -63,6 +65,7 @@ export function useUrls() {
       const updated: ShortUrl = (result as { url?: ShortUrl; data?: ShortUrl }).data ?? result;
       setUrls((prev) => prev.map((u) => (u.id === id ? { ...u, ...updated } : u)));
       toast.success("URL updated");
+      synth.playSuccess();
       return updated;
     } catch (err) {
       const message =

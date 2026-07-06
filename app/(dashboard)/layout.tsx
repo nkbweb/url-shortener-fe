@@ -1,5 +1,7 @@
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { AppSidebar } from "@/components/layout/AppSidebar";
+import { CommandPalette } from "@/components/layout/CommandPalette";
+import { SnipCopilot } from "@/components/layout/SnipCopilot";
 import {
   SidebarProvider,
   SidebarInset,
@@ -23,6 +25,7 @@ export default function DashboardLayout({
               <SidebarTrigger className="-ml-2 h-9 w-9 text-muted-foreground hover:bg-muted/50 rounded-lg" />
             </div>
             <div className="flex items-center gap-4">
+              <CommandPalette />
               <ThemeToggle />
             </div>
           </header>
@@ -33,8 +36,12 @@ export default function DashboardLayout({
               {children}
             </div>
           </main>
+
+          {/* AI Terminal */}
+          <SnipCopilot />
         </SidebarInset>
       </div>
     </SidebarProvider>
   );
 }
+

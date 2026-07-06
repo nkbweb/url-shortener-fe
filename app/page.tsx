@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion, animate } from "framer-motion";
+import { motion, animate, AnimatePresence } from "framer-motion";
 import {
   Link2,
   BarChart3,
@@ -12,10 +12,14 @@ import {
   ArrowRight,
   Star,
   ExternalLink,
+  Check,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { FluidBackground } from "@/components/ui/FluidBackground";
+import { synth } from "@/lib/synth";
 import { fadeUp, stagger, staggerFast, scaleIn, itemVariants } from "@/lib/motion";
 
 const headingWords = [
@@ -116,10 +120,31 @@ function CounterStat({ value, suffix, label, decimal, prefix }: {
   );
 }
 
+function useMousePosition() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+  return mousePosition;
+}
+
 export default function LandingPage() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [mounted, setMounted] = useState(false);
+
+  // States for client-side demo shortener
+  const [demoUrl, setDemoUrl] = useState("");
+  const [demoResult, setDemoResult] = useState<string | null>(null);
+  const [isDemoLoading, setIsDemoLoading] = useState(false);
+  const [copiedDemo, setCopiedDemo] = useState(false);
+  const [demoError, setDemoError] = useState("");
+
+  const { x, y } = useMousePosition();
 
   useEffect(() => {
     setMounted(true);
@@ -131,8 +156,46 @@ export default function LandingPage() {
   if (!mounted) return null;
   if (isAuthenticated) return null;
 
+  const handleDemoShorten = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setDemoError("");
+    setDemoResult(null);
+
+    let target = demoUrl.trim();
+    if (!target) {
+      target = "https://very-long-url.com/with/a/really/long/path";
+    }
+
+    // Basic URL pattern test
+    const pattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i;
+    if (!pattern.test(target)) {
+      setDemoError("Enter a valid URL (e.g. google.com)");
+      return;
+    }
+
+    setIsDemoLoading(true);
+    // Simulate API delay for UX
+    await new Promise((r) => setTimeout(r, 700));
+    
+    const randomCode = Math.random().toString(36).substring(2, 8);
+    setDemoResult(randomCode);
+    synth.playSuccess();
+    setIsDemoLoading(false);
+  };
+
+  const handleDemoCopy = async () => {
+    if (!demoResult) return;
+    const shortLink = `snip.to/${demoResult}`;
+    await navigator.clipboard.writeText(shortLink);
+    synth.playCopy();
+    setCopiedDemo(true);
+    setTimeout(() => setCopiedDemo(false), 2000);
+  };
+
   return (
     <div className="relative min-h-dvh bg-background overflow-hidden">
+      <FluidBackground />
+
       {/* Background decorations */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -285,57 +348,96 @@ export default function LandingPage() {
           <motion.div
             whileHover={{ scale: 1.01, y: -2 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="rounded-2xl border border-border/50 bg-card overflow-hidden shadow-2xl"
+            className="rounded-2xl border border-border/50 bg-card overflow-hidden shadow-2xl glass-card"
           >
-            <div className="rounded-xl bg-background p-6 sm:p-8">
-              <div className="flex flex-col sm:flex-row items-stretch gap-3">
+            <div className="rounded-xl bg-background/50 p-6 sm:p-8">
+              <form onSubmit={handleDemoShorten} className="flex flex-col sm:flex-row items-stretch gap-3">
                 <div className="flex-1 relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     <Link2 className="h-4 w-4" />
                   </div>
-                  <div className="h-12 rounded-xl bg-muted/50 border border-border/60 flex items-center pl-10 pr-4 text-sm text-muted-foreground font-mono overflow-hidden">
-                    <TypewriterDemo />
-                  </div>
+                  <input
+                    type="text"
+                    value={demoUrl}
+                    onChange={(e) => {
+                      setDemoUrl(e.target.value);
+                      setDemoError("");
+                    }}
+                    placeholder="https://very-long-url.com/with/a/really/long/path"
+                    className="w-full h-12 rounded-xl bg-muted/40 border border-border/60 pl-10 pr-4 text-sm text-foreground focus:border-primary focus:outline-none transition-all font-mono"
+                  />
                 </div>
-                <motion.div
-                  className="h-12 rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center px-6 text-sm whitespace-nowrap cursor-pointer"
+                <motion.button
+                  type="submit"
+                  disabled={isDemoLoading}
+                  className="h-12 rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center px-6 text-sm whitespace-nowrap cursor-pointer disabled:opacity-75 select-none"
                   whileHover={{ scale: 1.02, backgroundColor: "var(--primary-hover, oklch(0.55 0.24 35))" }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Shorten →
-                </motion.div>
-              </div>
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                transition={{ delay: 1.8, duration: 0.4, ease: "easeOut" }}
-                className="mt-4 flex items-center gap-3 text-sm overflow-hidden"
-              >
-                <motion.div
-                  initial={{ x: -10, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 2.0, type: "spring", stiffness: 200, damping: 16 }}
-                  className="font-mono text-primary font-medium flex items-center gap-2"
+                  {isDemoLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Shortening…
+                    </>
+                  ) : (
+                    "Shorten →"
+                  )}
+                </motion.button>
+              </form>
+              
+              {demoError && (
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-xs text-destructive text-left mt-2 pl-1"
                 >
-                  <motion.span
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 2.5 }}
+                  {demoError}
+                </motion.p>
+              )}
+
+              <AnimatePresence mode="wait">
+                {demoResult ? (
+                  <motion.div
+                    key="result"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-4 flex items-center gap-3 text-sm overflow-hidden"
                   >
-                    <Link2 className="h-3.5 w-3.5" />
-                  </motion.span>
-                  snip.to/abc123
-                </motion.div>
-                <motion.div
-                  initial={{ x: -10, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 2.2, type: "spring", stiffness: 200, damping: 16 }}
-                  className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  <span>Copy</span>
-                </motion.div>
-              </motion.div>
+                    <motion.div
+                      initial={{ x: -10, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      className="font-mono text-primary font-medium flex items-center gap-2"
+                    >
+                      <Link2 className="h-3.5 w-3.5" />
+                      snip.to/{demoResult}
+                    </motion.div>
+                    <motion.div
+                      onClick={handleDemoCopy}
+                      className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      {copiedDemo ? (
+                        <>
+                          <Check className="h-3.5 w-3.5 text-emerald-500" />
+                          <span className="text-emerald-500 font-medium">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <ExternalLink className="h-3.5 w-3.5" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  !demoError && (
+                    <p className="text-xs text-muted-foreground text-left mt-3 pl-1">
+                      Paste any link and press Shorten to preview how it works instantly.
+                    </p>
+                  )
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         </motion.div>

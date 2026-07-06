@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import QRCode from "qrcode";
-import { Download, Loader2, Check, Copy, AlertCircle } from "lucide-react";
+import { Download, Loader2, Check, Copy, AlertCircle, Palette } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +19,20 @@ interface QrCodeDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+const colorPresets = [
+  { label: "Classic Black", value: "#0a0a0f", bg: "bg-[#0a0a0f] border-zinc-700" },
+  { label: "Warm Orange", value: "#f55d20", bg: "bg-[#f55d20] border-orange-300" },
+  { label: "Golden Amber", value: "#eab308", bg: "bg-[#eab308] border-yellow-300" },
+  { label: "Deep Navy", value: "#1e3a8a", bg: "bg-[#1e3a8a] border-blue-400" },
+  { label: "Emerald Green", value: "#10b981", bg: "bg-[#10b981] border-emerald-300" },
+] as const;
+
 export function QrCodeDialog({ shortUrl, shortCode, open, onOpenChange }: QrCodeDialogProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [rendering, setRendering] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [darkColor, setDarkColor] = useState<string>("#0a0a0f");
 
   useEffect(() => {
     if (!open) return;
@@ -34,7 +43,7 @@ export function QrCodeDialog({ shortUrl, shortCode, open, onOpenChange }: QrCode
     QRCode.toDataURL(shortUrl, {
       width: 240,
       margin: 2,
-      color: { dark: "#0a0a0f", light: "#ffffff" },
+      color: { dark: darkColor, light: "#ffffff" },
     })
       .then((url) => {
         setQrDataUrl(url);
@@ -44,12 +53,12 @@ export function QrCodeDialog({ shortUrl, shortCode, open, onOpenChange }: QrCode
         setError(true);
       })
       .finally(() => setRendering(false));
-  }, [open, shortUrl]);
+  }, [open, shortUrl, darkColor]);
 
   const download = () => {
     if (!qrDataUrl) return;
     const link = document.createElement("a");
-    link.download = `qr-${shortCode}.png`;
+    link.download = `qr-${shortCode}-${darkColor.replace("#", "")}.png`;
     link.href = qrDataUrl;
     link.click();
   };
@@ -66,18 +75,19 @@ export function QrCodeDialog({ shortUrl, shortCode, open, onOpenChange }: QrCode
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-sm" showCloseButton>
         <DialogHeader>
-          <DialogTitle className="text-center text-base">QR Code</DialogTitle>
+          <DialogTitle className="text-center text-base">QR Code Designer</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col items-center gap-5 py-2">
-          <div className="relative" style={{ width: 240, height: 240 }}>
+          {/* QR code canvas preview wrapper */}
+          <div className="relative border border-border/50 rounded-2xl p-1 overflow-hidden bg-white shadow-inner flex items-center justify-center" style={{ width: 248, height: 248 }}>
             <AnimatePresence mode="wait">
               {rendering && (
                 <motion.div
                   key="spinner"
                   initial={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 flex items-center justify-center rounded-xl bg-card"
+                  className="absolute inset-0 flex items-center justify-center rounded-xl bg-white"
                 >
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 </motion.div>
@@ -108,6 +118,29 @@ export function QrCodeDialog({ shortUrl, shortCode, open, onOpenChange }: QrCode
             </AnimatePresence>
           </div>
 
+          {/* Color Customizer presets */}
+          <div className="w-full flex flex-col items-center gap-2 bg-muted/30 border border-border/40 py-2.5 px-4 rounded-xl">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+              <Palette className="h-3.5 w-3.5" />
+              <span>Customize QR Theme</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              {colorPresets.map((preset) => (
+                <button
+                  key={preset.value}
+                  type="button"
+                  onClick={() => setDarkColor(preset.value)}
+                  className={`h-5 w-5 rounded-full ${preset.bg} border transition-all cursor-pointer ${
+                    darkColor === preset.value
+                      ? "ring-2 ring-primary scale-110 ring-offset-2 dark:ring-offset-card"
+                      : "opacity-85 hover:opacity-100 hover:scale-105"
+                  }`}
+                  title={preset.label}
+                />
+              ))}
+            </div>
+          </div>
+
           <p className="font-mono text-xs text-muted-foreground text-center break-all max-w-[200px]">
             {shortUrl}
           </p>
@@ -125,7 +158,7 @@ export function QrCodeDialog({ shortUrl, shortCode, open, onOpenChange }: QrCode
               ) : (
                 <Copy className="h-4 w-4" />
               )}
-              {copied ? "Copied!" : "Copy"}
+              {copied ? "Copied!" : "Copy Image"}
             </Button>
             <Button
               size="sm"
@@ -134,7 +167,7 @@ export function QrCodeDialog({ shortUrl, shortCode, open, onOpenChange }: QrCode
               className="rounded-xl gap-1.5"
             >
               <Download className="h-4 w-4" />
-              Download
+              Download PNG
             </Button>
           </div>
         </div>

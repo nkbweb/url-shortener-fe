@@ -25,6 +25,8 @@ export interface AnalyticsData {
   clicksByDay: { date: string; count: number }[];
   referrers: { source: string; count: number }[];
   browsers: { browser: string; count: number }[];
+  devices: { device: string; count: number }[];
+  os: { os: string; count: number }[];
 }
 
 export interface UrlAnalyticsResponse {

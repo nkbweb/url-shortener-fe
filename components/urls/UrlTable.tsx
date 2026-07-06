@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { synth } from "@/lib/synth";
 import {
   Copy,
   Trash2,
@@ -46,6 +47,7 @@ import {
 } from "@/components/ui/tooltip";
 import { EditUrlDialog } from "./EditUrlDialog";
 import { QrCodeDialog } from "./QrCodeDialog";
+import { ConstellationMap } from "./ConstellationMap";
 
 interface UrlTableProps {
   urls: ShortUrl[];
@@ -57,6 +59,7 @@ interface UrlTableProps {
 }
 
 export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMore }: UrlTableProps) {
+  const [viewMode, setViewMode] = useState<"table" | "constellation">("table");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,6 +69,10 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [qrTarget, setQrTarget] = useState<ShortUrl | null>(null);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
+
+  const maxClicks = useMemo(() => {
+    return Math.max(...urls.map((u) => u.clicks), 1);
+  }, [urls]);
 
   const filtered = useMemo(() => {
     if (!searchQuery.trim()) return urls;
@@ -80,6 +87,7 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
   const copyToClipboard = async (url: ShortUrl) => {
     const shortUrl = getRedirectUrl(url.shortCode);
     await navigator.clipboard.writeText(shortUrl);
+    synth.playCopy();
     setCopiedId(url.id);
     setTimeout(() => setCopiedId(null), 2000);
   };
@@ -138,37 +146,76 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
 
   return (
     <>
-      {/* Search bar */}
+      {/* Search and View Switcher */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
-        className="relative mb-4"
+        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4"
       >
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search links by URL or short code…"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 h-10 rounded-xl bg-muted/30 border-border/60 focus:border-primary transition-all pr-10"
-        />
-        {searchQuery && (
+        <div className="relative flex-1">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search links by URL or short code…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 h-10 rounded-xl bg-muted/30 border-border/60 focus:border-primary transition-all pr-10"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Tab Selector */}
+        <div className="flex h-10 items-center gap-1 rounded-xl bg-muted/40 p-1 border border-border/50 select-none shrink-0">
           <button
-            onClick={() => setSearchQuery("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            type="button"
+            onClick={() => setViewMode("table")}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer select-none ${
+              viewMode === "table"
+                ? "bg-card text-foreground shadow"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
           >
-            <X className="h-4 w-4" />
+            Table View
           </button>
-        )}
+          <button
+            type="button"
+            onClick={() => setViewMode("constellation")}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer select-none ${
+              viewMode === "constellation"
+                ? "bg-card text-foreground shadow"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Constellation Map
+          </button>
+        </div>
       </motion.div>
 
-      {/* Table card */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.15 }}
-        className="rounded-2xl border border-border/50 bg-card overflow-hidden"
-      >
+      {viewMode === "constellation" ? (
+        <motion.div
+          key="constellation"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <ConstellationMap urls={filtered} />
+        </motion.div>
+      ) : (
+        /* Table card */
+        <motion.div
+          key="table"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15 }}
+          className="rounded-2xl border border-border/50 bg-card overflow-hidden"
+        >
         <Table>
           <TableHeader>
             <TableRow className="border-border/50 hover:bg-transparent">
@@ -200,76 +247,99 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                 </motion.td>
               </TableRow>
             ) : (
-              filtered.map((url, i) => (
-                <motion.tr
-                  key={url.id}
-                  initial={{ opacity: 0, y: 8, x: -4 }}
-                  animate={{ opacity: 1, y: 0, x: 0 }}
-                  transition={{ delay: i * 0.035, type: "spring", stiffness: 300, damping: 26 }}
-                  data-slot="table-row"
-                  className="border-b border-border/40 hover:bg-muted/20 group"
-                >
-                  <TableCell className="pl-6 max-w-[240px] py-4">
-                    <a
-                      href={url.originalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors truncate"
-                      title={url.originalUrl}
-                    >
-                      <span className="truncate">{url.originalUrl}</span>
-                      <ExternalLink className="h-3 w-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
-                  </TableCell>
+              filtered.map((url, i) => {
+                const domain = getDomain(url.originalUrl);
+                const clickRatio = Math.round((url.clicks / maxClicks) * 100);
 
-                  <TableCell className="py-4">
-                    <div className="flex items-center gap-2">
+                return (
+                  <motion.tr
+                    key={url.id}
+                    initial={{ opacity: 0, y: 8, x: -4 }}
+                    animate={{ opacity: 1, y: 0, x: 0 }}
+                    transition={{ delay: i * 0.035, type: "spring", stiffness: 300, damping: 26 }}
+                    data-slot="table-row"
+                    className="border-b border-border/40 hover:bg-muted/20 group transition-colors duration-150"
+                  >
+                    <TableCell className="pl-6 max-w-[240px] py-4">
                       <a
-                        href={getRedirectUrl(url.shortCode)}
+                        href={url.originalUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-mono text-sm font-medium text-primary hover:underline underline-offset-4"
+                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors truncate"
+                        title={url.originalUrl}
                       >
-                        /{url.shortCode}
+                        {domain && (
+                          <img
+                            src={`https://www.google.com/s2/favicons?sz=32&domain=${domain}`}
+                            alt=""
+                            className="h-4.5 w-4.5 shrink-0 rounded bg-muted/40 p-0.5 select-none"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                        )}
+                        <span className="truncate">{url.originalUrl}</span>
+                        <ExternalLink className="h-3 w-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </a>
-                      <motion.button
-                        aria-label="Copy short URL"
-                        onClick={() => copyToClipboard(url)}
-                        whileTap={{ scale: 0.85 }}
-                        className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
-                      >
-                        <AnimatePresence mode="wait">
-                          {copiedId === url.id ? (
-                            <motion.span
-                              key="check"
-                              initial={{ scale: 0, rotate: -45 }}
-                              animate={{ scale: 1, rotate: 0 }}
-                              exit={{ scale: 0, rotate: 45 }}
-                              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                            >
-                              <Check className="h-3.5 w-3.5 text-emerald-500" />
-                            </motion.span>
-                          ) : (
-                            <motion.span
-                              key="copy"
-                              initial={{ scale: 0, rotate: 45 }}
-                              animate={{ scale: 1, rotate: 0 }}
-                              exit={{ scale: 0, rotate: -45 }}
-                              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                            >
-                              <Copy className="h-3.5 w-3.5" />
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
-                      </motion.button>
-                    </div>
-                  </TableCell>
+                    </TableCell>
 
-                  <TableCell className="text-center py-4">
-                    <span className="inline-flex items-center justify-center min-w-[2.5rem] rounded-full bg-gradient-to-r from-accent/30 to-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent-foreground tabular-nums">
-                      {url.clicks}
-                    </span>
-                  </TableCell>
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-2">
+                        <a
+                          href={getRedirectUrl(url.shortCode)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-sm font-medium text-primary hover:underline underline-offset-4"
+                        >
+                          /{url.shortCode}
+                        </a>
+                        <motion.button
+                          aria-label="Copy short URL"
+                          onClick={() => copyToClipboard(url)}
+                          whileTap={{ scale: 0.85 }}
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-150 opacity-0 group-hover:opacity-100"
+                        >
+                          <AnimatePresence mode="wait">
+                            {copiedId === url.id ? (
+                              <motion.span
+                                key="check"
+                                initial={{ scale: 0, rotate: -45 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                exit={{ scale: 0, rotate: 45 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                              >
+                                <Check className="h-3.5 w-3.5 text-emerald-500" />
+                              </motion.span>
+                            ) : (
+                              <motion.span
+                                key="copy"
+                                initial={{ scale: 0, rotate: 45 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                exit={{ scale: 0, rotate: -45 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                              >
+                                <Copy className="h-3.5 w-3.5" />
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+                        </motion.button>
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="text-center py-4">
+                      <div className="flex flex-col items-center gap-1 justify-center">
+                        <span className="inline-flex items-center justify-center min-w-[2.5rem] rounded-full bg-gradient-to-r from-accent/30 to-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent-foreground tabular-nums">
+                          {url.clicks}
+                        </span>
+                        {/* Click Velocity Tracker bar */}
+                        <div className="w-10 h-1 bg-muted rounded-full overflow-hidden" title={`${clickRatio}% of maximum clicks`}>
+                          <div
+                            className="h-full bg-accent rounded-full"
+                            style={{ width: `${clickRatio}%` }}
+                          />
+                        </div>
+                      </div>
+                    </TableCell>
 
                   <TableCell className="text-sm text-muted-foreground whitespace-nowrap hidden sm:table-cell py-4">
                     {new Date(url.createdAt).toLocaleDateString("en-US", {
@@ -385,11 +455,13 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
                     </div>
                   </TableCell>
                 </motion.tr>
-              ))
-            )}
-          </TableBody>
+              );
+            })
+          )}
+        </TableBody>
         </Table>
       </motion.div>
+      )}
 
       {/* QR dialog */}
       {qrTarget && (
@@ -439,3 +511,13 @@ export function UrlTable({ urls, isLoading, hasMore, onEdit, onDelete, onLoadMor
     </>
   );
 }
+
+function getDomain(urlStr: string) {
+  try {
+    const u = new URL(urlStr);
+    return u.hostname.replace("www.", "");
+  } catch {
+    return "";
+  }
+}
+
