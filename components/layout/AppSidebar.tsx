@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -37,6 +38,12 @@ const navItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
 
   return (
     <Sidebar className="border-r border-border/50">
@@ -83,14 +90,14 @@ export function AppSidebar() {
                 <SidebarMenuButton className="w-full justify-between rounded-lg px-3 py-5 border border-border/50 bg-card hover:bg-muted/50 transition-all duration-150">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="h-7 w-7 shrink-0 rounded-lg bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center text-xs font-medium">
-                      {user?.email?.charAt(0).toUpperCase() || "U"}
+                      {(mounted && user?.email?.charAt(0).toUpperCase()) || "U"}
                     </div>
                     <div className="flex flex-col text-left min-w-0">
                       <span className="text-sm font-medium leading-none mb-0.5 truncate">
-                        {user?.email?.split("@")[0] || "User"}
+                        {(mounted && user?.email?.split("@")[0]) || "User"}
                       </span>
                       <span className="text-xs text-muted-foreground truncate">
-                        {user?.email}
+                        {(mounted && user?.email) || ""}
                       </span>
                     </div>
                   </div>
@@ -103,8 +110,12 @@ export function AppSidebar() {
                 className="w-[--radix-popper-anchor-width] rounded-xl border-border/50 shadow-lg"
               >
                 <div className="p-3">
-                  <p className="text-sm font-medium text-foreground">{user?.email?.split("@")[0] || "User"}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{user?.email}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {(mounted && user?.email?.split("@")[0]) || "User"}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {(mounted && user?.email) || ""}
+                  </p>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

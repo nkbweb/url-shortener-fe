@@ -54,10 +54,27 @@ export default function AnalyticsPage() {
       .finally(() => setLoading(false));
   }, [params.shortCode]);
 
-  // Filter clicks over time based on date range
+  // Filter clicks over time based on date range, padding missing days with 0 clicks
   const filteredClicksByDay = useMemo(() => {
-    if (!data?.analytics.clicksByDay) return [];
-    return data.analytics.clicksByDay.slice(-dateRange);
+    const result: { date: string; count: number }[] = [];
+    const clicksMap = new Map<string, number>();
+    
+    if (data?.analytics.clicksByDay) {
+      data.analytics.clicksByDay.forEach((item) => {
+        clicksMap.set(item.date, item.count);
+      });
+    }
+
+    // Generate date list for the selected timeframe (7, 14, or 30 days) leading to today
+    for (let i = dateRange - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split("T")[0];
+      const count = clicksMap.get(dateStr) || 0;
+      result.push({ date: dateStr, count });
+    }
+    
+    return result;
   }, [data, dateRange]);
 
   if (loading) {
@@ -644,12 +661,12 @@ function InteractiveAreaChart({ data }: InteractiveAreaChartProps) {
       >
         <defs>
           <linearGradient id="chartStroke" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="var(--primary)" />
-            <stop offset="100%" stopColor="var(--accent)" />
+            <stop offset="0%" style={{ stopColor: "var(--primary)" }} />
+            <stop offset="100%" style={{ stopColor: "var(--accent)" }} />
           </linearGradient>
           <linearGradient id="chartArea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.00" />
+            <stop offset="0%" style={{ stopColor: "var(--primary)" }} stopOpacity="0.22" />
+            <stop offset="100%" style={{ stopColor: "var(--primary)" }} stopOpacity="0.00" />
           </linearGradient>
         </defs>
 
@@ -681,9 +698,9 @@ function InteractiveAreaChart({ data }: InteractiveAreaChartProps) {
               fill="transparent"
               stroke="url(#chartStroke)"
               strokeWidth="2.5"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             />
           </>
         )}
