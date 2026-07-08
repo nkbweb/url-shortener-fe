@@ -53,45 +53,45 @@
 }
 
 /* ============================================================
-   Light mode design tokens — Warm Orange palette
+   Light mode design tokens — Cyber Slate & Cyan
    ============================================================ */
 :root {
-  /* Primary — vivid warm orange */
-  --primary:             oklch(0.62 0.22 35);   /* #F55D20 */
+  /* Primary — glowing electric cyan/blue */
+  --primary:             oklch(0.55 0.16 200);   /* #0284C7 */
   --primary-foreground:  oklch(1 0 0);
-  --primary-hover:       oklch(0.55 0.24 35);
-  --primary-glow:        oklch(0.62 0.22 35 / 25%);
+  --primary-hover:       oklch(0.50 0.18 200);
+  --primary-glow:        oklch(0.55 0.16 200 / 25%);
 
-  /* Backgrounds — clean, crisp */
-  --background:          oklch(0.975 0.005 60);
-  --foreground:          oklch(0.10 0.015 35);  /* richer near-black */
+  /* Backgrounds — clean cool gray */
+  --background:          oklch(0.985 0.005 240);
+  --foreground:          oklch(0.12 0.015 240);  /* dark slate */
 
   /* Cards & surfaces */
   --card:                oklch(1 0 0);
-  --card-foreground:     oklch(0.10 0.015 35);
+  --card-foreground:     oklch(0.12 0.015 240);
   --popover:             oklch(1 0 0);
-  --popover-foreground:  oklch(0.10 0.015 35);
+  --popover-foreground:  oklch(0.12 0.015 240);
 
   /* Muted */
-  --muted:               oklch(0.90 0.01 55);
-  --muted-foreground:    oklch(0.38 0.03 40);   /* darker for crisp readability */
+  --muted:               oklch(0.94 0.01 240);
+  --muted-foreground:    oklch(0.40 0.01 240);
 
   /* Secondary */
-  --secondary:           oklch(0.90 0.01 55);
-  --secondary-foreground:oklch(0.20 0.025 35);
+  --secondary:           oklch(0.94 0.01 240);
+  --secondary-foreground:oklch(0.20 0.015 240);
 
-  /* Accent — warm amber gold */
-  --accent:              oklch(0.78 0.18 65);
-  --accent-foreground:   oklch(0.10 0.015 35);
+  /* Accent — cyber violet */
+  --accent:              oklch(0.52 0.20 280);   /* #8B5CF6 */
+  --accent-foreground:   oklch(1 0 0);
 
   /* Destructive */
   --destructive:         oklch(0.52 0.22 25);
   --destructive-foreground: oklch(1 0 0);
 
-  /* Borders & inputs — clearly visible */
-  --border:              oklch(0.74 0.02 50);
-  --input:               oklch(0.82 0.02 50);
-  --ring:                oklch(0.62 0.22 35 / 45%);
+  /* Borders & inputs — clean */
+  --border:              oklch(0.88 0.01 240);
+  --input:               oklch(0.88 0.01 240);
+  --ring:                oklch(0.55 0.16 200 / 45%);
 
   --radius: 0.75rem;
 
@@ -105,53 +105,53 @@
 }
 
 /* ============================================================
-   Dark mode design tokens — Midnight Navy ✦ Gold
+   Dark mode design tokens — Obsidian Dark & Cyber Cyan/Violet
    ============================================================ */
 .dark {
-  /* Primary — refined gold */
-  --primary:             oklch(0.76 0.13 75);
-  --primary-foreground:  oklch(0.12 0.02 30);
-  --primary-hover:       oklch(0.81 0.11 75);
-  --primary-glow:        oklch(0.76 0.13 75 / 25%);
+  /* Primary — glowing cyber cyan */
+  --primary:             oklch(0.75 0.15 190);   /* #22D3EE */
+  --primary-foreground:  oklch(0.08 0.015 260);
+  --primary-hover:       oklch(0.80 0.13 190);
+  --primary-glow:        oklch(0.75 0.15 190 / 25%);
 
-  /* Background — deep navy blue */
-  --background:          oklch(0.10 0.030 270);  /* #0C1122 */
-  --foreground:          oklch(0.99 0 0);          /* pure white */
+  /* Background — deep obsidian black */
+  --background:          oklch(0.08 0.015 260);  /* #090B10 */
+  --foreground:          oklch(0.99 0 0);
 
-  /* Cards — subtly lifted, blue surface */
-  --card:                oklch(0.16 0.035 260);  /* #182242 */
+  /* Cards — deep obsidian translucent */
+  --card:                oklch(0.11 0.02 260);   /* #111420 */
   --card-foreground:     oklch(0.99 0 0);
-  --popover:             oklch(0.16 0.035 260);
+  --popover:             oklch(0.11 0.02 260);
   --popover-foreground:  oklch(0.99 0 0);
 
-  /* Muted — one layer above card */
-  --muted:               oklch(0.20 0.035 260);  /* #202E52 */
-  --muted-foreground:    oklch(0.88 0.008 260);  /* #D0DAEC — bright, crisp */
+  /* Muted */
+  --muted:               oklch(0.14 0.02 260);   /* #171B2B */
+  --muted-foreground:    oklch(0.80 0.01 260);
 
   /* Secondary */
-  --secondary:           oklch(0.20 0.035 260);
+  --secondary:           oklch(0.14 0.02 260);
   --secondary-foreground:oklch(0.99 0 0);
 
-  /* Accent — cool blue */
-  --accent:              oklch(0.58 0.10 260);
-  --accent-foreground:   oklch(0.99 0 0);
+  /* Accent — glowing cyber violet */
+  --accent:              oklch(0.65 0.22 290);   /* #C084FC */
+  --accent-foreground:   oklch(0.08 0.015 260);
 
   /* Destructive */
   --destructive:         oklch(0.58 0.18 25);
   --destructive-foreground: oklch(1 0 0);
 
-  /* Borders & inputs — visible but subtle */
-  --border:              oklch(1 0 0 / 14%);
-  --input:               oklch(1 0 0 / 16%);
-  --ring:                oklch(0.76 0.13 75 / 50%);
+  /* Borders & inputs */
+  --border:              oklch(1 0 0 / 8%);
+  --input:               oklch(1 0 0 / 10%);
+  --ring:                oklch(0.75 0.15 190 / 50%);
 
-  /* Sidebar — matches card surface */
-  --sidebar:                   oklch(0.12 0.030 265);
+  /* Sidebar */
+  --sidebar:                   oklch(0.09 0.015 260);
   --sidebar-foreground:        oklch(0.99 0 0);
-  --sidebar-accent:            oklch(0.18 0.030 265);
+  --sidebar-accent:            oklch(0.13 0.02 260);
   --sidebar-accent-foreground: oklch(0.99 0 0);
-  --sidebar-border:            oklch(1 0 0 / 12%);
-  --sidebar-ring:              oklch(0.76 0.13 75 / 50%);
+  --sidebar-border:            oklch(1 0 0 / 8%);
+  --sidebar-ring:              oklch(0.75 0.15 190 / 50%);
 }
 
 /* ============================================================
@@ -196,8 +196,8 @@
   .text-gradient {
     background: linear-gradient(
       135deg,
-      oklch(0.62 0.22 35),
-      oklch(0.72 0.20 50)
+      oklch(0.55 0.16 200),
+      oklch(0.52 0.20 280)
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -207,8 +207,8 @@
   .dark .text-gradient {
     background: linear-gradient(
       135deg,
-      oklch(0.80 0.13 75),
-      oklch(0.90 0.06 85)
+      oklch(0.75 0.15 190),
+      oklch(0.65 0.22 290)
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -232,6 +232,23 @@
     box-shadow:
       0 2px 20px oklch(0 0 0 / 50%),
       0 1px 4px oklch(0 0 0 / 30%);
+  }
+
+  /* Ultimate frosted glass panel */
+  .glass-morph {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.03);
+  }
+
+  .dark .glass-morph {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.22);
   }
 
   /* Primary glow button effect */
@@ -362,7 +379,14 @@
 
   /* Selection */
   ::selection {
-    background: oklch(0.62 0.22 35 / 25%);
+    background: oklch(0.75 0.15 190 / 25%);
     color: inherit;
+  }
+
+  /* Sleek developer-platform dot grid pattern */
+  .dot-grid {
+    background-image: radial-gradient(var(--border) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    background-position: center;
   }
 }

@@ -40,8 +40,8 @@ export function FluidBackground() {
         this.vx = (Math.random() - 0.5) * 0.4;
         this.vy = (Math.random() - 0.5) * 0.4;
         this.color = Math.random() > 0.5 
-          ? "rgba(245, 93, 32, 0.35)" // Primary orange glow
-          : "rgba(234, 179, 8, 0.25)"; // Accent amber glow
+          ? "rgba(34, 211, 238, 0.30)" // Glowing Cyan
+          : "rgba(192, 132, 252, 0.22)"; // Glowing Violet
       }
 
       update() {
@@ -120,8 +120,8 @@ export function FluidBackground() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(150, 150, 150, ${(14 - distance / 8) / 100})`;
-            ctx.lineWidth = 0.6;
+            ctx.strokeStyle = `rgba(192, 132, 252, ${((14 - distance / 8) / 100) * 0.3})`;
+            ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         }

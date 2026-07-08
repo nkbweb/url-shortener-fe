@@ -46,7 +46,7 @@ export function AppSidebar() {
 
 
   return (
-    <Sidebar className="border-r border-border/50">
+    <Sidebar className="border-r border-white/5 dark:border-white/10 bg-card/15 backdrop-blur-2xl">
       <SidebarHeader className="p-4 pb-2">
         <Link href="/" className="flex items-center gap-2 font-semibold text-lg tracking-tight px-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60 shadow-sm">
@@ -55,7 +55,7 @@ export function AppSidebar() {
           <span className="text-gradient">Snip</span>
         </Link>
       </SidebarHeader>
-
+ 
       <SidebarContent className="px-3 py-2">
         <SidebarGroup>
           <SidebarGroupContent>
@@ -81,13 +81,13 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
+ 
       <SidebarFooter className="p-3 pt-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="w-full justify-between rounded-lg px-3 py-5 border border-border/50 bg-card hover:bg-muted/50 transition-all duration-150">
+                <SidebarMenuButton className="w-full justify-between rounded-lg px-3 py-5 glass-morph hover:border-primary/25 transition-all duration-150">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="h-7 w-7 shrink-0 rounded-lg bg-gradient-to-br from-primary to-primary/60 text-primary-foreground flex items-center justify-center text-xs font-medium">
                       {(mounted && user?.email?.charAt(0).toUpperCase()) || "U"}

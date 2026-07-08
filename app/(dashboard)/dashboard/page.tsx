@@ -97,51 +97,72 @@ export default function DashboardPage() {
         }}
       />
 
-      {/* Welcome banner */}
+      {/* Welcome HUD & Shorten Form */}
       <motion.div
         variants={fadeUp}
-        className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-primary/5 via-card to-card p-6 sm:p-8"
+        className="relative overflow-hidden rounded-3xl glass-morph p-6 sm:p-10 text-center space-y-6 shadow-xl"
       >
         <motion.div
           aria-hidden
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-primary/15 blur-3xl"
         />
         <motion.div
           aria-hidden
-          animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="pointer-events-none absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-accent/10 blur-3xl"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-accent/15 blur-3xl"
         />
-        <div className="relative z-10 flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Your{" "}
-              <span className="text-gradient">Links</span>
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {user?.email
-                ? `Welcome back, ${user.email.split("@")[0]}`
-                : "Manage and track all your short links"}
-            </p>
-          </div>
-          <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Sparkles className="h-5 w-5" />
-          </div>
+        <div className="relative z-10 space-y-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+            Your <span className="text-gradient">Links</span>, Amplified
+          </h1>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            {user?.email
+              ? `Welcome back, ${user.email.split("@")[0]}. Shorten URLs and track real-time analytics.`
+              : "Shorten and track your links with state-of-the-art telemetry."}
+          </p>
+        </div>
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <ShortenForm shorten={shorten} isShortenLoading={isShortenLoading} />
         </div>
       </motion.div>
 
-      {/* Stats grid */}
-      <motion.div variants={staggerSpring} initial="hidden" animate="visible" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {stats.map((stat) => (
-          <StatCard key={stat.label} {...stat} />
-        ))}
-      </motion.div>
-
-      {/* Shorten form */}
-      <motion.div variants={fadeUp}>
-        <ShortenForm shorten={shorten} isShortenLoading={isShortenLoading} />
+      {/* Stats Ribbon */}
+      <motion.div
+        variants={staggerSpring}
+        initial="hidden"
+        animate="visible"
+        className="relative overflow-hidden rounded-2xl glass-morph p-5 sm:p-6 shadow-md"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-border/40">
+          {stats.map((stat, idx) => (
+            <div
+              key={stat.label}
+              className={`flex items-center justify-between gap-4 ${
+                idx > 0 ? "sm:pl-6 pt-4 sm:pt-0" : ""
+              }`}
+            >
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  {stat.icon}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-2xl font-bold text-foreground tabular-nums tracking-tight">
+                    {stat.value.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-muted-foreground font-medium mt-0.5 truncate">
+                    {stat.label}
+                  </p>
+                </div>
+              </div>
+              <div className="shrink-0 pr-2">
+                <Sparkline data={stat.sparkline} color={stat.color} />
+              </div>
+            </div>
+          ))}
+        </div>
       </motion.div>
 
       {/* URL table section */}
@@ -159,107 +180,12 @@ export default function DashboardPage() {
         <UrlTable
           urls={urls}
           isLoading={isLoading}
-          hasMore={hasMore}
           onEdit={updateUrl}
           onDelete={deleteUrl}
           onLoadMore={loadMore}
+          hasMore={hasMore}
         />
       </motion.section>
-    </motion.div>
-  );
-}
-
-function StatCard({
-  icon,
-  label,
-  value,
-  accent,
-  border,
-  sparkline,
-  color,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: number;
-  accent: string;
-  border: string;
-  sparkline: number[];
-  color: string;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState("perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)");
-  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    
-    const x = mouseX - width / 2;
-    const y = mouseY - height / 2;
-    
-    const rotX = -(y / (height / 2)) * 7;
-    const rotY = (x / (width / 2)) * 7;
-    
-    setTransform(`perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.025)`);
-    setGlare({
-      x: (mouseX / width) * 100,
-      y: (mouseY / height) * 100,
-      opacity: 0.35,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTransform("perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)");
-    setGlare((prev) => ({ ...prev, opacity: 0 }));
-  };
-
-  return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ transform }}
-      variants={itemVariants}
-      className={`group relative rounded-2xl border border-border/50 bg-card p-5 ${border} glass-card cursor-default select-none transition-shadow duration-300 hover:shadow-xl`}
-    >
-      <div
-        aria-hidden
-        className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br ${accent} opacity-50`}
-      />
-      {/* Dynamic glare layer */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"
-        style={{
-          background: `radial-gradient(circle 130px at ${glare.x}% ${glare.y}%, ${color}25, transparent 75%)`,
-          opacity: glare.opacity,
-        }}
-      />
-      <div className="relative flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4 min-w-0">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary/15">
-            {icon}
-          </div>
-          <div className="min-w-0">
-            <p className="text-2xl font-bold text-foreground tabular-nums tracking-tight">
-              {typeof value === "number" ? value.toLocaleString() : value}
-            </p>
-            <p className="text-xs text-muted-foreground font-medium mt-0.5 truncate">
-              {label}
-            </p>
-          </div>
-        </div>
-
-        {/* Mini SVG Sparkline */}
-        <div className="shrink-0 pl-1">
-          <Sparkline data={sparkline} color={color} />
-        </div>
-      </div>
     </motion.div>
   );
 }
@@ -281,7 +207,7 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
     .join(" ");
 
   return (
-    <svg width={width} height={height} className="overflow-visible opacity-70 group-hover:opacity-100 transition-opacity">
+    <svg width={width} height={height} className="overflow-visible opacity-70 hover:opacity-100 transition-opacity">
       <polyline
         fill="none"
         stroke={color}
